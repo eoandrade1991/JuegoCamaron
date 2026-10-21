@@ -65,29 +65,48 @@ export class ShrimpJumpGame {
       this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       this.ctx.scale(this.scaleFactor, this.scaleFactor);
       this.actualHeight = (rect.height * dpr) / this.scaleFactor;
+
+      // Reubicar dinámicamente si ya hay piscinas inicializadas
+      if (this.pools && this.pools.length > 0 && !this.shrimp.isJumping) {
+        this.repositionPoolsForMobile();
+      }
     };
+
     window.addEventListener('resize', this.resize);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(this.resize, 150);
+    });
     this.resize();
   }
 
   setupInteractions() {
-    this.canvas.addEventListener('click', (e) => {
+    const handleTapOrClick = (clientX, clientY) => {
       if (this.isInputBlocked || this.shrimp.isJumping) return;
       const rect = this.canvas.getBoundingClientRect();
-      const clientX = e.clientX - rect.left;
-      const clientY = e.clientY - rect.top;
-      const virtualX = clientX / (rect.width / this.vWidth);
-      const virtualY = clientY / (rect.height / this.actualHeight);
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      const virtualX = x / (rect.width / this.vWidth);
+      const virtualY = y / (rect.height / this.actualHeight);
 
-      // Comprobar clic en alguna de las piscinas de opciones
+      // Comprobar clic/toque en alguna de las piscinas de opciones
       this.pools.forEach((pool) => {
         if (pool.isOption && this.isPointInPool(virtualX, virtualY, pool)) {
           this.handleAnswerSelected(pool.optionIndex);
         }
       });
+    };
+
+    this.canvas.addEventListener('click', (e) => {
+      handleTapOrClick(e.clientX, e.clientY);
     });
 
-    // Soporte para cursor pointer al pasar por una piscina
+    this.canvas.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches[0]) {
+        handleTapOrClick(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    // Soporte para cursor pointer al pasar por una piscina (escritorio)
     this.canvas.addEventListener('mousemove', (e) => {
       if (this.isInputBlocked || this.shrimp.isJumping) {
         this.canvas.style.cursor = 'default';
@@ -109,6 +128,25 @@ export class ShrimpJumpGame {
         }
       });
       this.canvas.style.cursor = isHovering ? 'pointer' : 'default';
+    });
+  }
+
+  repositionPoolsForMobile() {
+    const targetHeight = this.actualHeight || this.vHeight;
+    const originY = Math.max(380, targetHeight - 95);
+    const destY = Math.max(160, Math.min(270, targetHeight * 0.42));
+
+    this.pools.forEach((pool) => {
+      if (!pool.isOption) {
+        pool.y = originY;
+        if (!this.shrimp.isJumping) {
+          this.shrimp.y = originY;
+          this.shrimp.startY = originY;
+        }
+      } else {
+        const count = this.pools.filter(p => p.isOption).length;
+        pool.y = destY + Math.abs(pool.optionIndex - (count - 1) / 2) * 14;
+      }
     });
   }
 

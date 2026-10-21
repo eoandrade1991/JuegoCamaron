@@ -498,7 +498,8 @@ html, body {
 .canvas-wrapper {
   position: relative;
   width: 100%;
-  height: 520px;
+  height: min(48vh, 470px);
+  min-height: 240px;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-lg), 0 0 0 1px var(--border-glass);
@@ -514,16 +515,16 @@ html, body {
 /* Banner de la Pregunta Actual */
 .question-banner {
   position: absolute;
-  top: 18px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
+  width: 92%;
   max-width: 820px;
-  background: rgba(15, 23, 42, 0.88);
+  background: rgba(15, 23, 42, 0.92);
   backdrop-filter: blur(16px);
-  padding: 16px 24px;
+  padding: 12px 20px;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: var(--shadow-lg);
   text-align: center;
   z-index: 10;
@@ -535,7 +536,7 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .q-banner-pill {
@@ -549,7 +550,7 @@ html, body {
 }
 
 .q-banner-text {
-  font-size: 1.25rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.25rem);
   font-weight: 700;
   color: #ffffff;
   line-height: 1.35;
@@ -558,10 +559,10 @@ html, body {
 /* Opciones de respuesta en tarjetas interactivas (Froggy Jumps style) */
 .options-bar {
   width: 100%;
-  margin-top: 14px;
+  margin-top: 10px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
 }
 
 .option-card-btn {
@@ -1584,17 +1585,26 @@ textarea.form-control {
 }
 
 /* ==========================================================================
-   Responsive Adaptability
+   Responsive Adaptability & Mobile-First Educaplay UX
    ========================================================================== */
-@media (max-width: 900px) {
+
+/* Tablets y Pantallas Medianas (<= 992px) */
+@media (max-width: 992px) {
   .editor-body {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .editor-sidebar {
+    order: 2;
+  }
+  .editor-main-panel {
+    order: 1;
   }
   .lobby-title {
-    font-size: 2.1rem;
+    font-size: 2.2rem;
   }
   .canvas-wrapper {
-    height: 420px;
+    height: min(44vh, 400px);
   }
   .results-header-actions {
     flex-direction: column;
@@ -1602,21 +1612,229 @@ textarea.form-control {
   }
 }
 
-@media (max-width: 600px) {
+/* Teléfonos y Dispositivos Móviles (<= 768px) */
+@media (max-width: 768px) {
   .main-header {
-    padding: 0 14px;
+    height: 56px;
+    padding: 0 12px;
+  }
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 18px;
   }
   .brand-text h1 {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
   }
-  .nav-tab-btn span.tab-title {
+  .brand-text .tagline {
     display: none;
   }
+  .nav-tabs {
+    padding: 2px;
+  }
+  .nav-tab-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  .header-controls {
+    gap: 6px;
+  }
+  .user-badge-pill {
+    padding: 2px 8px;
+    font-size: 0.75rem;
+  }
+  .user-badge-pill button {
+    display: none;
+  }
+
+  /* Lobby en teléfonos */
+  .lobby-container {
+    padding: 16px 12px;
+  }
+  .lobby-hero-banner {
+    height: 190px;
+  }
+  .lobby-content {
+    padding: 20px 16px 28px;
+    gap: 14px;
+  }
+  .lobby-title {
+    font-size: 1.75rem;
+  }
+  .lobby-desc {
+    font-size: 0.95rem;
+  }
+  .btn-hero-play {
+    font-size: 1.1rem;
+    padding: 14px 28px;
+    width: 100%;
+  }
+
+  /* Arena de Juego en teléfonos */
+  .game-view-container {
+    padding: 8px 10px 16px;
+    min-height: calc(100vh - 56px);
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .game-hud {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border-radius: var(--radius-md);
+  }
+  .hud-label {
+    display: none;
+  }
+  .hud-value {
+    font-size: 1.15rem;
+  }
+  .hud-lives {
+    font-size: 1.2rem;
+    gap: 3px;
+  }
+  .timer-pill {
+    padding: 4px 10px;
+    font-size: 1rem;
+  }
+
+  /* Canvas responsivo que se ajusta a la pantalla del teléfono */
+  .canvas-wrapper {
+    height: clamp(220px, 40vh, 320px);
+    border-radius: var(--radius-md);
+  }
+
+  .question-banner {
+    top: 8px;
+    width: 95%;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+  }
+  .q-banner-pill {
+    font-size: 0.65rem;
+    padding: 1px 8px;
+  }
+  .q-banner-text {
+    font-size: 0.95rem;
+    line-height: 1.25;
+  }
+
+  /* Opciones en cuadrícula de 2x2 para fácil toque con pulgares */
+  .options-bar {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .option-card-btn {
+    padding: 10px 12px;
+    min-height: 52px;
+    border-radius: var(--radius-sm);
+    gap: 8px;
+  }
+  .option-card-btn .btn-badge {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    font-size: 0.95rem;
+  }
+  .option-card-btn .btn-text {
+    font-size: 0.85rem;
+    line-height: 1.2;
+  }
+  .option-card-btn .key-hint {
+    display: none; /* No hay teclado físico en teléfonos */
+  }
+
+  /* Modales en teléfonos */
+  .modal-card {
+    padding: 24px 16px;
+    border-radius: var(--radius-md);
+    max-width: 96%;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .modal-avatar {
+    width: 74px;
+    height: 74px;
+  }
+  .modal-title {
+    font-size: 1.6rem;
+  }
+  .modal-subtitle {
+    font-size: 0.9rem;
+  }
+  .form-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .form-control {
+    font-size: 16px; /* Evita que Safari en iOS haga zoom automático molesto */
+    padding: 10px 12px;
+  }
+
+  /* Panel de Administración en teléfonos */
+  .editor-layout {
+    padding: 12px;
+  }
+  .editor-header {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  .editor-title-group h2 {
+    font-size: 1.3rem;
+  }
+  .admin-tab-nav {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    flex-wrap: nowrap;
+  }
+  .admin-tab-nav .btn {
+    white-space: nowrap;
+  }
+  .editor-top-actions {
+    width: 100%;
+  }
+  .editor-top-actions .btn {
+    flex: 1 1 calc(50% - 8px);
+    font-size: 0.85rem;
+    padding: 8px 10px;
+  }
+  .editor-main-panel {
+    padding: 16px 14px;
+  }
+  .q-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .q-card-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .option-row {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .correct-tag {
+    font-size: 0.75rem;
+  }
+  .ai-preview-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Pantallas Extra Pequeñas (<= 380px) */
+@media (max-width: 380px) {
   .options-bar {
     grid-template-columns: 1fr;
   }
+  .lobby-title {
+    font-size: 1.5rem;
+  }
   .game-hud {
-    padding: 10px 14px;
+    padding: 6px 8px;
   }
 }
+
 
