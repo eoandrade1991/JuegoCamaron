@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salto Camaronero | Juego Educativo Estilo Educaplay</title>
+    <meta name="description" content="Juego interactivo de preguntas y respuestas donde un camarón salta entre piscinas de acuicultura. Basado en la mecánica de Froggy Jumps de Educaplay con roles separados para Jugadores y Administradores." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦐</text></svg>" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Barra Superior de Navegación -->
+      <header class="main-header">
+        <div class="brand" id="brand-home" title="Ir al inicio">
+          <div class="brand-icon">🦐</div>
+          <div class="brand-text">
+            <h1>Salto Camaronero</h1>
+            <span class="tagline">Educaplay Edition</span>
+          </div>
+        </div>
+
+        <!-- Pestañas de navegación según rol -->
+        <nav class="nav-tabs" id="nav-tabs-container">
+          <button id="tab-play" class="nav-tab-btn active">
+            <span class="tab-icon">🎮</span>
+            <span class="tab-title">Jugar</span>
+          </button>
+          <button id="tab-editor" class="nav-tab-btn view-hidden">
+            <span class="tab-icon">🛠️</span>
+            <span class="tab-title">Panel Administrativo</span>
+          </button>
+        </nav>
+
+        <!-- Controles de cabecera e identificación de usuario -->
+        <div class="header-controls">
+          <!-- Insignia del usuario actual -->
+          <div id="user-badge-container" class="user-badge-pill">
+            <span id="user-badge-icon">👤</span>
+            <span id="user-badge-text">No registrado</span>
+            <button id="btn-user-action" class="btn btn-sm btn-secondary" title="Cambiar jugador o registrarse">
+              Identificarse
+            </button>
+          </div>
+
+          <button id="btn-admin-access" class="btn btn-sm btn-secondary" title="Acceso exclusivo para administradores y docentes">
+            🔒 Acceso Admin
+          </button>
+
+          <button id="btn-sound-toggle" class="btn btn-icon" title="Silenciar / Activar sonido">
+            🔊
+          </button>
+          <button id="btn-fullscreen-toggle" class="btn btn-icon" title="Pantalla completa">
+            ⛶
+          </button>
+        </div>
+      </header>
+
+      <!-- VISTA 1: Lobby / Menú de Inicio -->
+      <section id="view-lobby" class="view-section">
+        <div class="lobby-container">
+          <div class="lobby-card">
+            <div class="lobby-hero-banner">
+              <img src="/assets/cover.jpg" alt="Camarón saltando entre piscinas de acuicultura" />
+              <div class="lobby-hero-overlay"></div>
+            </div>
+
+            <div class="lobby-content">
+              <h2 class="lobby-title" id="lobby-quiz-title">
+                El Gran Salto del <span>Camarón</span>
+              </h2>
+              <p class="lobby-desc" id="lobby-quiz-desc">
+                Ayuda al camarón a saltar de piscina en piscina respondiendo correctamente cada pregunta sobre el fascinante mundo acuático y su hábitat. ¡Cuidado con caer en la tierra seca!
+              </p>
+
+              <!-- Tarjeta de bienvenida al jugador -->
+              <div id="lobby-player-card" class="lobby-player-card">
+                <span class="player-icon">🦐</span>
+                <div class="player-details">
+                  <div class="player-welcome-label">Jugador Activo:</div>
+                  <div class="player-name-display" id="lobby-player-name">Sin registrar</div>
+                  <div class="player-sub-display" id="lobby-player-sub">Por favor regístrate para comenzar la partida</div>
+                </div>
+                <button id="btn-lobby-change-player" class="btn btn-sm btn-secondary">
+                  Cambiar Datos
+                </button>
+              </div>
+
+              <div class="lobby-badges">
+                <span class="lobby-badge" id="lobby-badge-questions">📝 7 Preguntas</span>
+                <span class="lobby-badge" id="lobby-badge-lives">❤️ 3 Vidas</span>
+                <span class="lobby-badge" id="lobby-badge-time">⏱️ 20s por pregunta</span>
+                <span class="lobby-badge">🌊 Modo Acuicultura</span>
+              </div>
+
+              <div class="lobby-actions">
+                <button id="btn-start-game" class="btn btn-primary btn-hero-play">
+                  ▶️ ¡Comenzar Partida!
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VISTA 2: Arena de Juego -->
+      <section id="view-game" class="view-section view-hidden">
+        <div class="game-view-container">
+          <!-- HUD Superior -->
+          <div class="game-hud">
+            <div class="hud-item">
+              <div class="hud-label">Pregunta</div>
+              <div class="hud-value" id="hud-question-number">1 / 7</div>
+            </div>
+
+            <div class="hud-item timer-container">
+              <div class="timer-pill" id="hud-timer">
+                <span class="timer-icon">⏱️</span>
+                <span id="hud-timer-text">20s</span>
+              </div>
+            </div>
+
+            <div class="hud-item">
+              <div class="hud-label">Vidas</div>
+              <div class="hud-lives" id="hud-lives-container">
+                <span class="hud-heart">❤️</span>
+                <span class="hud-heart">❤️</span>
+                <span class="hud-heart">❤️</span>
+              </div>
+            </div>
+
+            <div class="hud-item">
+              <div class="hud-label">Puntos</div>
+              <div class="hud-value" id="hud-score">0</div>
+            </div>
+
+            <div class="hud-item" id="hud-streak-container">
+              <div class="hud-label">Racha</div>
+              <div class="hud-value" id="hud-streak" style="color: #f59e0b;">x1</div>
+            </div>
+          </div>
+
+          <!-- Canvas 2.5D con Banner de Pregunta Flotante -->
+          <div class="canvas-wrapper">
+            <div class="question-banner" id="question-banner">
+              <div class="q-banner-meta">
+                <span class="q-banner-pill" id="banner-q-pill">Pregunta 1</span>
+              </div>
+              <h2 class="q-banner-text" id="banner-q-text">
+                Cargando pregunta...
+              </h2>
+            </div>
+            <canvas id="game-canvas"></canvas>
+          </div>
+
+          <!-- Barra Inferior de Tarjetas de Opción (Accesibilidad y Clics Rápidos) -->
+          <div class="options-bar" id="options-bar">
+            <!-- Se generan dinámicamente según la pregunta actual -->
+          </div>
+        </div>
+      </section>
+
+      <!-- VISTA 3: Panel Administrativo y Editor de Preguntas (Sólo Rol Admin) -->
+      <section id="view-editor" class="view-section view-hidden">
+        <div id="editor-container"></div>
+      </section>
+
+      <!-- MODAL: REGISTRO OBLIGATORIO DE JUGADOR -->
+      <div id="modal-player-register" class="modal-overlay view-hidden">
+        <div class="modal-card modal-register-card">
+          <div class="modal-avatar">
+            <img src="/assets/mascot.jpg" alt="Mascota Camarón" />
+          </div>
+          <h2 class="modal-title">Registro del Jugador</h2>
+          <p class="modal-subtitle">
+            Ingresa tus datos personales para guardar tus puntuaciones y comenzar el juego.
+          </p>
+
+          <form id="form-player-register" class="register-form">
+            <div class="form-group">
+              <label for="reg-fullname"><strong>Nombres y Apellidos Completos *</strong></label>
+              <input type="text" id="reg-fullname" class="form-control" placeholder="Ej: Juan Carlos Pérez Gómez" required />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col">
+                <label for="reg-cedula"><strong>Cédula / Identificación *</strong></label>
+                <input type="text" id="reg-cedula" class="form-control" placeholder="Ej: 0912345678" required />
+              </div>
+
+              <div class="form-group col">
+                <label for="reg-birthdate"><strong>Fecha de Nacimiento *</strong></label>
+                <input type="date" id="reg-birthdate" class="form-control" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-email"><strong>Correo Electrónico *</strong></label>
+              <input type="email" id="reg-email" class="form-control" placeholder="Ej: juan.perez@ejemplo.com" required />
+            </div>
+
+            <div id="register-error-msg" class="form-error-msg view-hidden"></div>
+
+            <div class="modal-actions" style="margin-top: 14px;">
+              <button type="submit" class="btn btn-primary" style="flex: 2;">
+                🎮 ¡Guardar y Comenzar a Jugar!
+              </button>
+              <button type="button" id="btn-cancel-register" class="btn btn-secondary" style="flex: 1;">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- MODAL: ACCESO ADMINISTRATIVO (DOCENTES / ADMIN) -->
+      <div id="modal-admin-login" class="modal-overlay view-hidden">
+        <div class="modal-card modal-admin-card">
+          <div class="admin-lock-icon">🔒</div>
+          <h2 class="modal-title">Acceso Administrativo</h2>
+          <p class="modal-subtitle">
+            Ingresa la contraseña para editar preguntas, cambiar configuraciones y ver las calificaciones de los jugadores.
+          </p>
+
+          <form id="form-admin-login" class="admin-login-form">
+            <div class="form-group">
+              <label for="input-admin-password"><strong>Contraseña de Administrador</strong></label>
+              <input type="password" id="input-admin-password" class="form-control" placeholder="Escribe la clave de acceso..." required />
+              <small class="helper-text" style="margin-top: 6px;">
+                💡 Clave por defecto inicial: <code>admin123</code> (configurable adentro).
+              </small>
+            </div>
+
+            <div id="admin-login-error" class="form-error-msg view-hidden"></div>
+
+            <div class="modal-actions" style="margin-top: 16px;">
+              <button type="submit" class="btn btn-accent" style="flex: 2;">
+                🔓 Ingresar al Panel
+              </button>
+              <button type="button" id="btn-cancel-admin-login" class="btn btn-secondary" style="flex: 1;">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- MODAL: GENERADOR DE PREGUNTAS CON IA (PDF / PPTX) -->
+      <div id="modal-ai-generator" class="modal-overlay view-hidden">
+        <div class="modal-card modal-ai-card">
+          <div class="ai-header-badge">✨ INTELIGENCIA ARTIFICIAL</div>
+          <h2 class="modal-title">Generador de Preguntas desde Documento</h2>
+          <p class="modal-subtitle">
+            Carga una presentación PowerPoint (.pptx) o un documento PDF. La IA analizará los contenidos y creará automáticamente las preguntas y piscinas de opciones.
+          </p>
+
+          <!-- Paso 1: Configuración y Carga de Archivo -->
+          <div id="ai-step-upload" class="ai-step-section">
+            <div class="file-dropzone" id="ai-file-dropzone">
+              <div class="dropzone-icon">📑</div>
+              <div class="dropzone-text">
+                <strong>Haz clic o arrastra aquí tu archivo</strong>
+                <span>Formatos soportados: Presentaciones PowerPoint (.pptx) o Documentos PDF (.pdf)</span>
+              </div>
+              <input type="file" id="input-ai-document" accept=".pdf,.pptx,.ppt" style="display: none;" />
+            </div>
+
+            <!-- Información del archivo seleccionado -->
+            <div id="ai-file-info" class="ai-file-info-box view-hidden">
+              <span id="ai-file-icon">📑</span>
+              <div class="ai-file-text">
+                <strong id="ai-file-name">presentacion.pptx</strong>
+                <span id="ai-file-meta">Tamaño: 2.4 MB | Analizando...</span>
+              </div>
+              <button type="button" id="btn-remove-ai-file" class="btn btn-sm btn-icon" title="Quitar archivo">✕</button>
+            </div>
+
+            <div class="form-row" style="margin-top: 16px;">
+              <div class="form-group col">
+                <label for="ai-question-count"><strong>Número de Preguntas a Generar</strong></label>
+                <div class="range-with-val">
+                  <input type="range" id="ai-question-count" min="3" max="15" value="5" class="form-range" />
+                  <span id="ai-question-count-display" class="badge-count">5 preguntas</span>
+                </div>
+              </div>
+
+              <div class="form-group col">
+                <label for="ai-difficulty"><strong>Nivel de Dificultad</strong></label>
+                <select id="ai-difficulty" class="form-control">
+                  <option value="fácil">Fácil (conceptos directos)</option>
+                  <option value="media" selected>Media (comprensión general)</option>
+                  <option value="avanzada">Avanzada (análisis y detalle)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Configuración de API Key de Gemini -->
+            <div class="ai-key-section">
+              <label for="input-gemini-api-key">
+                <strong>Google Gemini API Key (Para IA Avanzada)</strong>
+              </label>
+              <div class="api-key-input-row">
+                <input type="password" id="input-gemini-api-key" class="form-control" placeholder="Pega tu clave de API de Gemini..." />
+                <button type="button" id="btn-save-gemini-key" class="btn btn-sm btn-secondary">
+                  Guardar
+                </button>
+              </div>
+              <small class="helper-text">
+                💡 Puedes obtener una clave 100% gratuita en <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--color-water-bright);">Google AI Studio</a>. Si no ingresas una clave, se usará el extractor inteligente local de prueba.
+              </small>
+            </div>
+
+            <div id="ai-generate-error" class="form-error-msg view-hidden"></div>
+
+            <!-- Acciones del paso 1 -->
+            <div class="modal-actions" style="margin-top: 20px;">
+              <button type="button" id="btn-start-ai-generate" class="btn btn-accent" style="flex: 2;">
+                🚀 Generar Preguntas con IA
+              </button>
+              <button type="button" id="btn-cancel-ai" class="btn btn-secondary" style="flex: 1;">
+                Cancelar
+              </button>
+            </div>
+          </div>
+
+          <!-- Indicador de Carga / Procesamiento -->
+          <div id="ai-step-loading" class="ai-step-section view-hidden">
+            <div class="ai-loading-spinner"></div>
+            <h3 id="ai-loading-title">Analizando documento...</h3>
+            <p id="ai-loading-desc" class="helper-text">Extrayendo texto de las diapositivas y consultando a la Inteligencia Artificial...</p>
+          </div>
+
+          <!-- Paso 2: Vista Previa y Aprobación de Preguntas -->
+          <div id="ai-step-preview" class="ai-step-section view-hidden">
+            <div class="ai-preview-header">
+              <h3 id="ai-preview-title">Cuestionario Generado</h3>
+              <p id="ai-preview-desc" class="helper-text"></p>
+            </div>
+
+            <div class="ai-preview-list" id="ai-preview-list"></div>
+
+            <div class="ai-import-mode-select">
+              <label class="switch-label">
+                <input type="radio" name="ai-import-mode" value="replace" checked />
+                <span><strong>Reemplazar</strong> el cuestionario actual con estas preguntas</span>
+              </label>
+              <label class="switch-label">
+                <input type="radio" name="ai-import-mode" value="append" />
+                <span><strong>Añadir</strong> al final de las preguntas existentes</span>
+              </label>
+            </div>
+
+            <div class="modal-actions" style="margin-top: 18px;">
+              <button type="button" id="btn-accept-ai-quiz" class="btn btn-primary" style="flex: 2;">
+                ✅ Aplicar al Juego y Guardar
+              </button>
+              <button type="button" id="btn-back-ai-upload" class="btn btn-secondary" style="flex: 1;">
+                Regresar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Victoria -->
+      <div id="modal-victory" class="modal-overlay view-hidden">
+        <div class="modal-card">
+          <div class="modal-avatar">
+            <img src="/assets/mascot.jpg" alt="Camarón Feliz" />
+          </div>
+          <div class="stars-rating" id="victory-stars">⭐⭐⭐</div>
+          <h2 class="modal-title">¡Misión Cumplida!</h2>
+          <p class="modal-subtitle">
+            ¡Felicidades <strong id="victory-player-name">Jugador</strong>! El camarón cruzó exitosamente todos los estanques.
+          </p>
+          <div class="score-highlight">
+            <div class="label">Puntuación Final</div>
+            <div class="value" id="victory-score">1250</div>
+          </div>
+          <div class="modal-actions">
+            <button id="btn-victory-replay" class="btn btn-primary">
+              🔄 Jugar de Nuevo
+            </button>
+            <button id="btn-victory-exit" class="btn btn-secondary">
+              🏠 Menú Principal
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Game Over -->
+      <div id="modal-gameover" class="modal-overlay view-hidden">
+        <div class="modal-card">
+          <div class="modal-avatar" style="border-color: #ef4444;">
+            <img src="/assets/mascot.jpg" alt="Camarón en apuros" />
+          </div>
+          <h2 class="modal-title" style="color: #f87171;">¡El Camarón cayó en tierra seca!</h2>
+          <p class="modal-subtitle">
+            ¡Buen intento, <strong id="gameover-player-name">Jugador</strong>! Se agotaron las vidas en tierra.
+          </p>
+          <div class="score-highlight">
+            <div class="label">Puntos Obtenidos</div>
+            <div class="value" id="gameover-score">320</div>
+          </div>
+          <div class="modal-actions">
+            <button id="btn-gameover-retry" class="btn btn-primary">
+              🔁 Reintentar
+            </button>
+            <button id="btn-gameover-exit" class="btn btn-secondary">
+              🏠 Menú Principal
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
