@@ -1200,6 +1200,13 @@ textarea.form-control {
   color: var(--text-muted);
 }
 
+.player-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 /* Modal de Registro de Jugador */
 .modal-register-card {
   max-width: 540px;

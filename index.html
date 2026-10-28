@@ -51,6 +51,9 @@
             <button id="btn-user-action" class="btn btn-sm btn-secondary" title="Iniciar sesión o registrarse">
               Identificarse
             </button>
+            <button id="btn-header-logout" class="btn btn-sm btn-danger-outline view-hidden" title="Cerrar la sesión actual">
+              🚪 Salir
+            </button>
           </div>
 
           <button id="btn-admin-access" class="btn btn-sm btn-secondary" title="Acceso exclusivo para administradores y docentes">
@@ -98,6 +101,9 @@
                   </button>
                   <button id="btn-lobby-change-player" class="btn btn-sm btn-secondary">
                     Iniciar Sesión
+                  </button>
+                  <button id="btn-lobby-logout" class="btn btn-sm btn-danger-outline view-hidden" title="Cerrar la sesión actual">
+                    🚪 Cerrar Sesión
                   </button>
                 </div>
               </div>
@@ -327,6 +333,10 @@
             <div class="auth-switch-prompt">
               ¿Aún no tienes cuenta? <button type="button" id="btn-switch-to-reg-link" class="btn-link">Regístrate gratis aquí</button>
             </div>
+
+            <div class="auth-switch-prompt" style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--color-border); text-align: center;">
+              🔒 ¿Eres docente o administrador? <button type="button" id="btn-switch-to-admin-login" class="btn-link">Ingresa como Administrador aquí</button>
+            </div>
           </form>
 
           <!-- Panel 2: Registro de Nuevo Usuario -->
@@ -403,12 +413,16 @@
             <div id="admin-login-error" class="form-error-msg view-hidden"></div>
 
             <div class="modal-actions" style="margin-top: 16px;">
-              <button type="submit" class="btn btn-accent" style="flex: 2;">
+              <button type="submit" id="btn-submit-admin-login" class="btn btn-accent" style="flex: 2;">
                 🔓 Ingresar al Panel
               </button>
               <button type="button" id="btn-cancel-admin-login" class="btn btn-secondary" style="flex: 1;">
                 Cancelar
               </button>
+            </div>
+
+            <div class="auth-switch-prompt" style="margin-top: 12px; text-align: center;">
+              ¿Eres jugador o estudiante? <button type="button" id="btn-switch-from-admin-to-player" class="btn-link">Iniciar sesión de jugador</button>
             </div>
           </form>
         </div>

@@ -28,6 +28,7 @@ class AppController {
     this.modalAdminLogin = document.getElementById('modal-admin-login');
     this.formLogin = document.getElementById('form-user-login');
     this.formRegister = document.getElementById('form-player-register');
+    this.formAdminLogin = document.getElementById('form-admin-login');
     this.loginErrorMsg = document.getElementById('login-error-msg');
     this.regErrorMsg = document.getElementById('register-error-msg');
     this.adminLoginError = document.getElementById('admin-login-error');
@@ -42,6 +43,8 @@ class AppController {
     this.userBadgeText = document.getElementById('user-badge-text');
     this.btnUserAction = document.getElementById('btn-user-action');
     this.btnAdminAccess = document.getElementById('btn-admin-access');
+    this.btnHeaderLogout = document.getElementById('btn-header-logout');
+    this.btnLobbyLogout = document.getElementById('btn-lobby-logout');
 
     // Modales de Fin de Partida
     this.modalVictory = document.getElementById('modal-victory');
@@ -140,9 +143,13 @@ class AppController {
       this.userBadgeContainer.className = 'user-badge-pill is-admin';
       this.userBadgeIcon.textContent = '🛡️';
       this.userBadgeText.textContent = 'Administrador';
-      this.btnUserAction.textContent = 'Salir';
-      this.btnUserAction.title = 'Cerrar sesión de administrador';
+      this.btnUserAction.textContent = 'Panel Admin';
+      this.btnUserAction.title = 'Ir al panel de edición y configuración';
       this.btnAdminAccess.classList.add('view-hidden');
+      if (this.btnHeaderLogout) {
+        this.btnHeaderLogout.classList.remove('view-hidden');
+        this.btnHeaderLogout.textContent = '🚪 Salir Admin';
+      }
 
       // Pestañas
       this.tabEditor.classList.remove('view-hidden');
@@ -150,6 +157,10 @@ class AppController {
       this.tabPlay.querySelector('.tab-title').textContent = 'Vista Previa';
 
       if (btnLobbyHistory) btnLobbyHistory.classList.add('view-hidden');
+      if (this.btnLobbyLogout) {
+        this.btnLobbyLogout.classList.remove('view-hidden');
+        this.btnLobbyLogout.textContent = '🚪 Salir de Modo Admin';
+      }
     } else if (role === 'player' && player) {
       // Configuración visual para Jugador Registrado
       this.userBadgeContainer.className = 'user-badge-pill is-player';
@@ -159,6 +170,10 @@ class AppController {
       this.btnUserAction.textContent = 'Mi Cuenta';
       this.btnUserAction.title = 'Ver mi perfil y reportes';
       this.btnAdminAccess.classList.remove('view-hidden');
+      if (this.btnHeaderLogout) {
+        this.btnHeaderLogout.classList.remove('view-hidden');
+        this.btnHeaderLogout.textContent = '🚪 Salir';
+      }
 
       // Mostrar pestaña de Historial/Perfil
       this.tabProfile.classList.remove('view-hidden');
@@ -166,6 +181,10 @@ class AppController {
       this.tabPlay.querySelector('.tab-title').textContent = 'Jugar';
 
       if (btnLobbyHistory) btnLobbyHistory.classList.remove('view-hidden');
+      if (this.btnLobbyLogout) {
+        this.btnLobbyLogout.classList.remove('view-hidden');
+        this.btnLobbyLogout.textContent = '🚪 Cerrar Sesión';
+      }
 
       if (this.currentView === 'editor') {
         this.switchView('lobby');
@@ -174,10 +193,13 @@ class AppController {
       // Invitado / No registrado
       this.userBadgeContainer.className = 'user-badge-pill';
       this.userBadgeIcon.textContent = '👤';
-      this.userBadgeText.textContent = 'Ingresar';
-      this.btnUserAction.textContent = 'Entrar';
+      this.userBadgeText.textContent = 'No registrado';
+      this.btnUserAction.textContent = 'Identificarse';
       this.btnUserAction.title = 'Iniciar sesión o registrarse';
       this.btnAdminAccess.classList.remove('view-hidden');
+      if (this.btnHeaderLogout) {
+        this.btnHeaderLogout.classList.add('view-hidden');
+      }
 
       // Ocultar perfil y editor
       this.tabProfile.classList.add('view-hidden');
@@ -185,6 +207,9 @@ class AppController {
       this.tabPlay.querySelector('.tab-title').textContent = 'Jugar';
 
       if (btnLobbyHistory) btnLobbyHistory.classList.add('view-hidden');
+      if (this.btnLobbyLogout) {
+        this.btnLobbyLogout.classList.add('view-hidden');
+      }
 
       if (this.currentView === 'editor' || this.currentView === 'profile') {
         this.switchView('lobby');
@@ -324,11 +349,10 @@ class AppController {
       });
     }
 
-    // Botón / Píldora de acción en la cabecera (Iniciar Sesión / Mi Cuenta / Salir de Admin)
+    // Botón / Píldora de acción en la cabecera (Iniciar Sesión / Mi Cuenta / Panel Admin)
     const handleUserBadgeClick = () => {
       if (this.auth.getRole() === 'admin') {
-        this.auth.exitAdminMode();
-        this.switchView('lobby');
+        this.switchView('editor');
       } else if (this.auth.getRole() === 'player') {
         this.switchView('profile');
       } else {
@@ -344,6 +368,31 @@ class AppController {
     this.userBadgeContainer.addEventListener('click', () => {
       handleUserBadgeClick();
     });
+
+    // Botón de Cerrar Sesión en la Cabecera
+    if (this.btnHeaderLogout) {
+      this.btnHeaderLogout.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (this.auth.getRole() === 'admin') {
+          this.auth.exitAdminMode();
+        } else {
+          this.auth.logout();
+        }
+        this.switchView('lobby');
+      });
+    }
+
+    // Botón de Cerrar Sesión en la Tarjeta del Lobby
+    if (this.btnLobbyLogout) {
+      this.btnLobbyLogout.addEventListener('click', () => {
+        if (this.auth.getRole() === 'admin') {
+          this.auth.exitAdminMode();
+        } else {
+          this.auth.logout();
+        }
+        this.switchView('lobby');
+      });
+    }
 
     // Botón de acceso exclusivo para administradores
     this.btnAdminAccess.addEventListener('click', () => {
@@ -397,8 +446,17 @@ class AppController {
     this.formLogin.addEventListener('submit', (e) => {
       e.preventDefault();
       try {
-        const identifier = document.getElementById('login-identifier').value;
+        const identifier = document.getElementById('login-identifier').value.trim();
         const password = document.getElementById('login-password').value;
+
+        // Soporte para ingresar como administrador directamente desde el modal principal
+        if (identifier.toLowerCase() === 'admin') {
+          this.auth.loginAdmin(password);
+          this.hideAuthModal();
+          this.switchView('editor');
+          return;
+        }
+
         this.auth.loginUser(identifier, password);
         this.hideAuthModal();
         this.switchView('profile');
@@ -411,6 +469,15 @@ class AppController {
     document.getElementById('btn-cancel-login').addEventListener('click', () => {
       this.hideAuthModal();
     });
+
+    // Enlace para pasar a modal de administrador desde el modal de jugador
+    const btnSwitchToAdmin = document.getElementById('btn-switch-to-admin-login');
+    if (btnSwitchToAdmin) {
+      btnSwitchToAdmin.addEventListener('click', () => {
+        this.hideAuthModal();
+        this.showAdminLoginModal();
+      });
+    }
 
     // --- FORMULARIO DE REGISTRO DE CUENTA ---
     this.formRegister.addEventListener('submit', (e) => {
@@ -437,8 +504,7 @@ class AppController {
     });
 
     // --- FORMULARIO DE LOGIN DE ADMINISTRADOR ---
-    this.formAdminLogin.addEventListener('submit', (e) => {
-      e.preventDefault();
+    const executeAdminLogin = () => {
       try {
         const pwd = document.getElementById('input-admin-password').value;
         this.auth.loginAdmin(pwd);
@@ -448,11 +514,51 @@ class AppController {
         this.adminLoginError.textContent = err.message;
         this.adminLoginError.classList.remove('view-hidden');
       }
-    });
+    };
+
+    if (this.formAdminLogin) {
+      this.formAdminLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        executeAdminLogin();
+      });
+    }
+
+    const btnSubmitAdmin = document.getElementById('btn-submit-admin-login');
+    if (btnSubmitAdmin) {
+      btnSubmitAdmin.addEventListener('click', (e) => {
+        e.preventDefault();
+        executeAdminLogin();
+      });
+    }
 
     document.getElementById('btn-cancel-admin-login').addEventListener('click', () => {
       this.hideAdminLoginModal();
     });
+
+    // Enlace para pasar de modal admin a modal de jugador
+    const btnSwitchFromAdmin = document.getElementById('btn-switch-from-admin-to-player');
+    if (btnSwitchFromAdmin) {
+      btnSwitchFromAdmin.addEventListener('click', () => {
+        this.hideAdminLoginModal();
+        this.showAuthModal('login');
+      });
+    }
+
+    // Cierre al hacer clic en el fondo oscuro de los modales
+    if (this.modalAdminLogin) {
+      this.modalAdminLogin.addEventListener('click', (e) => {
+        if (e.target === this.modalAdminLogin) {
+          this.hideAdminLoginModal();
+        }
+      });
+    }
+    if (this.modalAuth) {
+      this.modalAuth.addEventListener('click', (e) => {
+        if (e.target === this.modalAuth) {
+          this.hideAuthModal();
+        }
+      });
+    }
 
     // Acciones del Perfil del Jugador
     document.getElementById('btn-profile-play').addEventListener('click', () => {
