@@ -186,6 +186,7 @@ export class ShrimpJumpGame {
     this.ui.onLivesUpdate(this.lives, this.maxLives);
 
     this.initPondsForQuestion();
+    sounds.startBGM(false);
     this.startTimer();
 
     this.isRunning = true;
@@ -206,6 +207,7 @@ export class ShrimpJumpGame {
     this.isRunning = false;
     cancelAnimationFrame(this.animationFrameId);
     this.stopTimer();
+    sounds.stopBGM();
   }
 
   initPondsForQuestion() {
@@ -299,6 +301,9 @@ export class ShrimpJumpGame {
       questionText: qData.question,
       options: optionsWithMeta
     });
+
+    // Restablecer tempo normal de la música para la nueva pregunta
+    sounds.setBGMHurry(false);
   }
 
   startTimer() {
@@ -306,22 +311,29 @@ export class ShrimpJumpGame {
     const timeLimit = this.quiz.timePerQuestion || 0;
     if (timeLimit <= 0) {
       this.ui.onTimerUpdate(null);
+      sounds.setBGMHurry(false);
       return;
     }
 
     this.timeRemaining = timeLimit;
     this.ui.onTimerUpdate(this.timeRemaining, timeLimit);
+    sounds.setBGMHurry(this.timeRemaining <= 5 && this.timeRemaining > 0);
 
     this.timerInterval = setInterval(() => {
       this.timeRemaining--;
       this.ui.onTimerUpdate(this.timeRemaining, timeLimit);
 
+      // Si quedan 5 segundos o menos, acelerar la música y reproducir tics de urgencia
       if (this.timeRemaining <= 5 && this.timeRemaining > 0) {
+        sounds.setBGMHurry(true);
         sounds.playTick();
+      } else if (this.timeRemaining > 5) {
+        sounds.setBGMHurry(false);
       }
 
       if (this.timeRemaining <= 0) {
         this.stopTimer();
+        sounds.setBGMHurry(false);
         this.handleTimeout();
       }
     }, 1000);
@@ -337,6 +349,7 @@ export class ShrimpJumpGame {
   handleAnswerSelected(optionIndex) {
     if (this.isInputBlocked || this.shrimp.isJumping) return;
     this.stopTimer();
+    sounds.setBGMHurry(false);
     this.isInputBlocked = true;
 
     const chosenPool = this.pools.find((p) => p.isOption && p.optionIndex === optionIndex);
@@ -369,6 +382,7 @@ export class ShrimpJumpGame {
   handleTimeout() {
     if (this.isInputBlocked || this.shrimp.isJumping) return;
     this.isInputBlocked = true;
+    sounds.setBGMHurry(false);
 
     // Resaltar la respuesta correcta
     this.pools.forEach((p) => {

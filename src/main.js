@@ -546,6 +546,9 @@ class AppController {
   }
 
   switchView(viewName) {
+    if (viewName !== 'game' && this.game) {
+      this.game.stop();
+    }
     this.currentView = viewName;
 
     // Actualizar estados visuales de las pestañas
