@@ -30,7 +30,7 @@ export class AuthManager {
 
   loginUser(identifier, password) {
     if (!identifier || !identifier.trim()) {
-      throw new Error('Ingresa tu usuario, correo electrónico o cédula.');
+      throw new Error('Ingresa tu usuario o correo electrónico.');
     }
     if (!password || !password.trim()) {
       throw new Error('Ingresa tu contraseña.');
@@ -44,7 +44,7 @@ export class AuthManager {
   }
 
   registerUser(formData) {
-    const { username, password, fullName, cedula, email, birthDate } = formData;
+    const { username, password, fullName, email, birthDate } = formData;
 
     if (!username || username.trim().length < 3) {
       throw new Error('El nombre de usuario debe tener al menos 3 caracteres.');
@@ -54,9 +54,6 @@ export class AuthManager {
     }
     if (!fullName || fullName.trim().length < 3) {
       throw new Error('Por favor, ingresa tus nombres y apellidos completos.');
-    }
-    if (!cedula || cedula.trim().length < 5) {
-      throw new Error('Por favor, ingresa un número de cédula o identificación válido.');
     }
     if (!email || !email.includes('@') || !email.includes('.')) {
       throw new Error('Por favor, ingresa un correo electrónico válido.');
@@ -69,7 +66,6 @@ export class AuthManager {
       username: username.trim(),
       password: password.trim(),
       fullName: fullName.trim(),
-      cedula: cedula.trim(),
       email: email.trim().toLowerCase(),
       birthDate: birthDate
     });

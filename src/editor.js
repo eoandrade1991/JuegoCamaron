@@ -331,8 +331,8 @@ export class QuizEditor {
               <thead>
                 <tr>
                   <th>Fecha / Hora</th>
+                  <th>Usuario</th>
                   <th>Nombres y Apellidos</th>
-                  <th>Cédula</th>
                   <th>Correo Electrónico</th>
                   <th>F. Nacimiento</th>
                   <th>Puntos</th>
@@ -346,8 +346,8 @@ export class QuizEditor {
                     (r) => `
                   <tr>
                     <td><span class="badge-date">${this.escapeHtml(r.date)}</span></td>
+                    <td><code>@${this.escapeHtml(r.username || 'anon')}</code></td>
                     <td><strong>${this.escapeHtml(r.playerName || 'Anónimo')}</strong></td>
-                    <td><code>${this.escapeHtml(r.cedula || 'S/N')}</code></td>
                     <td>${this.escapeHtml(r.email || '-')}</td>
                     <td>${this.escapeHtml(r.birthDate || '-')}</td>
                     <td><strong style="color: #f59e0b; font-size: 1.1rem;">${r.score || 0} pts</strong></td>

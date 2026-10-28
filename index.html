@@ -201,10 +201,6 @@
 
               <div class="profile-meta-chips">
                 <div class="meta-chip">
-                  <span class="chip-label">🪪 Cédula:</span>
-                  <strong id="profile-cedula" class="chip-val">-</strong>
-                </div>
-                <div class="meta-chip">
                   <span class="chip-label">✉️ Correo:</span>
                   <strong id="profile-email" class="chip-val">-</strong>
                 </div>
@@ -308,8 +304,8 @@
             </p>
 
             <div class="form-group">
-              <label for="login-identifier"><strong>Usuario, Cédula o Correo *</strong></label>
-              <input type="text" id="login-identifier" class="form-control" placeholder="Ej: edgar99 o 0912345678" required autocomplete="username" />
+              <label for="login-identifier"><strong>Usuario o Correo Electrónico *</strong></label>
+              <input type="text" id="login-identifier" class="form-control" placeholder="Ej: juancarlos99 o tu@correo.com" required autocomplete="username" />
             </div>
 
             <div class="form-group">
@@ -358,19 +354,14 @@
 
             <div class="form-row">
               <div class="form-group col">
-                <label for="reg-cedula"><strong>Cédula / Identificación *</strong></label>
-                <input type="text" id="reg-cedula" class="form-control" placeholder="Ej: 0912345678" required />
+                <label for="reg-email"><strong>Correo Electrónico *</strong></label>
+                <input type="email" id="reg-email" class="form-control" placeholder="Ej: juan.perez@ejemplo.com" required autocomplete="email" />
               </div>
 
               <div class="form-group col">
                 <label for="reg-birthdate"><strong>Fecha de Nacimiento *</strong></label>
                 <input type="date" id="reg-birthdate" class="form-control" required />
               </div>
-            </div>
-
-            <div class="form-group">
-              <label for="reg-email"><strong>Correo Electrónico *</strong></label>
-              <input type="email" id="reg-email" class="form-control" placeholder="Ej: juan.perez@ejemplo.com" required autocomplete="email" />
             </div>
 
             <div id="register-error-msg" class="form-error-msg view-hidden"></div>

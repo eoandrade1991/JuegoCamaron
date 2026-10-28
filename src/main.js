@@ -257,7 +257,7 @@ class AppController {
       if (btnLobbyChange) btnLobbyChange.textContent = 'Cambiar Rol';
     } else if (player) {
       lobbyName.textContent = player.fullName;
-      lobbySub.textContent = `Usuario: @${player.username} | Cédula: ${player.cedula}`;
+      lobbySub.textContent = `Usuario: @${player.username} | ${player.email}`;
       if (btnLobbyChange) btnLobbyChange.textContent = 'Cambiar Cuenta';
     } else {
       lobbyName.textContent = 'Sin registrar';
@@ -420,7 +420,6 @@ class AppController {
           username: document.getElementById('reg-username').value,
           password: document.getElementById('reg-password').value,
           fullName: document.getElementById('reg-fullname').value,
-          cedula: document.getElementById('reg-cedula').value,
           email: document.getElementById('reg-email').value,
           birthDate: document.getElementById('reg-birthdate').value
         };
@@ -587,7 +586,6 @@ class AppController {
     // Datos del usuario en cabecera
     document.getElementById('profile-fullname').textContent = player.fullName || 'Jugador';
     document.getElementById('profile-username').textContent = `@${player.username || 'usuario'}`;
-    document.getElementById('profile-cedula').textContent = player.cedula || '-';
     document.getElementById('profile-email').textContent = player.email || '-';
     document.getElementById('profile-birthdate').textContent = player.birthDate || '-';
 
@@ -671,7 +669,7 @@ class AppController {
       return;
     }
 
-    const headers = ['Intento', 'Fecha', 'Usuario', 'Nombre', 'Cédula', 'Puntaje', 'Vidas Restantes', 'Preguntas Respondidas', 'Resultado'];
+    const headers = ['Intento', 'Fecha', 'Usuario', 'Nombre', 'Correo', 'Puntaje', 'Vidas Restantes', 'Preguntas Respondidas', 'Resultado'];
     const rows = attempts.map((r, idx) => {
       const isWin = r.livesRemaining > 0 && r.questionsAnswered === r.totalQuestions;
       return [
@@ -679,7 +677,7 @@ class AppController {
         `"${r.date || ''}"`,
         `"${player.username}"`,
         `"${player.fullName}"`,
-        `"${player.cedula}"`,
+        `"${player.email}"`,
         r.score || 0,
         r.livesRemaining !== undefined ? r.livesRemaining : 0,
         `"${r.questionsAnswered || 0}/${r.totalQuestions || 0}"`,
@@ -705,7 +703,6 @@ class AppController {
     ResultsStorage.saveResult({
       username: username,
       playerName: playerName,
-      cedula: player ? player.cedula : 'S/N',
       email: player ? player.email : '-',
       birthDate: player ? player.birthDate : '-',
       score: stats.score,
@@ -737,7 +734,6 @@ class AppController {
     ResultsStorage.saveResult({
       username: username,
       playerName: playerName,
-      cedula: player ? player.cedula : 'S/N',
       email: player ? player.email : '-',
       birthDate: player ? player.birthDate : '-',
       score: stats.score,

@@ -213,11 +213,11 @@ export class UserStorage {
     if (!username) return null;
     const clean = username.trim().toLowerCase();
     const users = this.getUsers();
-    return users.find(u => u.username.toLowerCase() === clean || u.email.toLowerCase() === clean || u.cedula === clean) || null;
+    return users.find(u => u.username.toLowerCase() === clean || u.email.toLowerCase() === clean) || null;
   }
 
   static registerUser(userData) {
-    const { username, password, fullName, cedula, email, birthDate } = userData;
+    const { username, password, fullName, email, birthDate } = userData;
     const users = this.getUsers();
 
     const cleanUsername = username.trim().toLowerCase();
@@ -225,9 +225,9 @@ export class UserStorage {
       throw new Error(`El nombre de usuario "${username}" ya está registrado. Elige otro diferente.`);
     }
 
-    const cleanCedula = cedula.trim();
-    if (users.some(u => u.cedula === cleanCedula)) {
-      throw new Error(`El número de cédula "${cedula}" ya tiene una cuenta registrada.`);
+    const cleanEmail = email.trim().toLowerCase();
+    if (users.some(u => u.email.toLowerCase() === cleanEmail)) {
+      throw new Error(`El correo electrónico "${email}" ya tiene una cuenta registrada.`);
     }
 
     const newUser = {
@@ -235,8 +235,7 @@ export class UserStorage {
       username: username.trim(),
       password: password.trim(),
       fullName: fullName.trim(),
-      cedula: cleanCedula,
-      email: email.trim().toLowerCase(),
+      email: cleanEmail,
       birthDate: birthDate,
       registeredAt: Date.now()
     };
@@ -256,12 +255,11 @@ export class UserStorage {
     const users = this.getUsers();
     const user = users.find(u =>
       u.username.toLowerCase() === cleanIdentifier ||
-      u.email.toLowerCase() === cleanIdentifier ||
-      u.cedula === identifier.trim()
+      u.email.toLowerCase() === cleanIdentifier
     );
 
     if (!user) {
-      throw new Error('No existe ninguna cuenta con ese usuario, correo o cédula.');
+      throw new Error('No existe ninguna cuenta con ese usuario o correo electrónico.');
     }
 
     if (user.password !== password.trim()) {
@@ -353,7 +351,7 @@ export class ResultsStorage {
     if (!username) return [];
     const clean = username.trim().toLowerCase();
     const all = this.getResults();
-    return all.filter(r => (r.username && r.username.toLowerCase() === clean) || (r.cedula && r.cedula === username));
+    return all.filter(r => r.username && r.username.toLowerCase() === clean);
   }
 
   static getUserStats(username) {
@@ -393,12 +391,11 @@ export class ResultsStorage {
     const results = this.getResults();
     if (results.length === 0) return false;
 
-    const headers = ['Fecha', 'Usuario', 'Jugador', 'Cédula', 'Correo', 'Fecha Nacimiento', 'Puntaje', 'Vidas Restantes', 'Preguntas'];
+    const headers = ['Fecha', 'Usuario', 'Jugador', 'Correo', 'Fecha Nacimiento', 'Puntaje', 'Vidas Restantes', 'Preguntas'];
     const rows = results.map(r => [
       `"${r.date || ''}"`,
       `"${r.username || '-'}"`,
       `"${r.playerName || ''}"`,
-      `"${r.cedula || ''}"`,
       `"${r.email || ''}"`,
       `"${r.birthDate || ''}"`,
       r.score || 0,
