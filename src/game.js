@@ -289,6 +289,9 @@ export class ShrimpJumpGame {
       { x: this.vWidth - 70, y: 390, angle: 1.5, speed: 4.2 }
     ];
 
+    // Ajustar piscinas a la altura real de pantalla del móvil
+    this.repositionPoolsForMobile();
+
     // Notificar UI externa para actualizar textos de pregunta y botones
     this.ui.onQuestionUpdate({
       questionNumber: this.currentQuestionIndex + 1,

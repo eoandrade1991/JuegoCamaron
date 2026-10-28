@@ -174,8 +174,8 @@ class AppController {
       // Invitado / No registrado
       this.userBadgeContainer.className = 'user-badge-pill';
       this.userBadgeIcon.textContent = '👤';
-      this.userBadgeText.textContent = 'No registrado';
-      this.btnUserAction.textContent = 'Iniciar Sesión';
+      this.userBadgeText.textContent = 'Ingresar';
+      this.btnUserAction.textContent = 'Entrar';
       this.btnUserAction.title = 'Iniciar sesión o registrarse';
       this.btnAdminAccess.classList.remove('view-hidden');
 
@@ -324,8 +324,8 @@ class AppController {
       });
     }
 
-    // Botón de acción en la cabecera (Iniciar Sesión / Mi Cuenta / Salir de Admin)
-    this.btnUserAction.addEventListener('click', () => {
+    // Botón / Píldora de acción en la cabecera (Iniciar Sesión / Mi Cuenta / Salir de Admin)
+    const handleUserBadgeClick = () => {
       if (this.auth.getRole() === 'admin') {
         this.auth.exitAdminMode();
         this.switchView('lobby');
@@ -334,6 +334,15 @@ class AppController {
       } else {
         this.showAuthModal('login');
       }
+    };
+
+    this.btnUserAction.addEventListener('click', (e) => {
+      e.stopPropagation();
+      handleUserBadgeClick();
+    });
+
+    this.userBadgeContainer.addEventListener('click', () => {
+      handleUserBadgeClick();
     });
 
     // Botón de acceso exclusivo para administradores
