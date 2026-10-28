@@ -41,8 +41,8 @@ export class QuizEditor {
         <header class="editor-header">
           <div class="editor-title-group">
             <span class="editor-badge">🛡️ PANEL DE ADMINISTRACIÓN Y DOCENCIA</span>
-            <h2>Gestión de Salto Camaronero</h2>
-            <p>Configura las preguntas del juego, revisa las calificaciones de los jugadores y administra la seguridad.</p>
+            <h2>El Salto de la Langosta: Gestión Docente</h2>
+            <p>Configura las preguntas del juego, el orden aleatorio, revisa el registro de jugadores y administra la seguridad.</p>
           </div>
 
           <div class="admin-tab-nav">
@@ -147,15 +147,27 @@ export class QuizEditor {
               </div>
             </div>
 
-            <div class="form-switches">
-              <label class="switch-label">
-                <input type="checkbox" id="edit-quiz-rand-q" ${this.quiz.randomizeQuestions ? 'checked' : ''} />
-                <span>Aleatorizar orden de preguntas</span>
-              </label>
-              <label class="switch-label">
-                <input type="checkbox" id="edit-quiz-rand-a" ${this.quiz.randomizeAnswers ? 'checked' : ''} />
-                <span>Aleatorizar orden de respuestas</span>
-              </label>
+            <div class="sidebar-card-highlight">
+              <div class="sidebar-card-header">
+                <span class="sidebar-card-icon">🎲</span>
+                <div>
+                  <strong>Preguntas y Opciones Aleatorias</strong>
+                  <div class="helper-text">Controla el orden en cada intento</div>
+                </div>
+              </div>
+              <div class="form-switches" style="margin-top: 10px;">
+                <label class="switch-label">
+                  <input type="checkbox" id="edit-quiz-rand-q" ${this.quiz.randomizeQuestions ? 'checked' : ''} />
+                  <span><strong>🎲 Preguntas en orden aleatorio</strong></span>
+                </label>
+                <div class="switch-desc">Baraja las preguntas en cada partida para que no salgan en el mismo orden.</div>
+
+                <label class="switch-label" style="margin-top: 10px;">
+                  <input type="checkbox" id="edit-quiz-rand-a" ${this.quiz.randomizeAnswers ? 'checked' : ''} />
+                  <span><strong>🔀 Respuestas en orden aleatorio</strong></span>
+                </label>
+                <div class="switch-desc">Baraja las piscinas A, B, C y D en cada turno.</div>
+              </div>
             </div>
           </div>
 
@@ -275,7 +287,7 @@ export class QuizEditor {
         <div class="q-card-feedback-section">
           <div class="form-group">
             <label for="input-active-q-feedback"><strong>💡 Dato curioso / Retroalimentación Pedagógica (Opcional)</strong></label>
-            <input type="text" id="input-active-q-feedback" class="form-control" placeholder="Ej: ¡Correcto! Los camarones mudan su caparazón..." value="${this.escapeHtml(q.feedback || '')}" />
+            <input type="text" id="input-active-q-feedback" class="form-control" placeholder="Ej: ¡Correcto! Las langostas tienen grandes quelas o pinzas..." value="${this.escapeHtml(q.feedback || '')}" />
             <small class="helper-text">Se mostrará al responder la pregunta para reforzar el aprendizaje.</small>
           </div>
         </div>

@@ -1,105 +1,106 @@
 // Sistema de almacenamiento y gestión de cuestionarios tipo Educaplay
 export const DEFAULT_QUIZ = {
-  id: 'camaron-default-01',
-  title: 'El Gran Salto del Camarón: Aventura Acuática',
-  description: 'Ayuda al camarón a saltar de piscina en piscina respondiendo correctamente cada pregunta sobre el fascinante mundo acuático y su hábitat.',
+  id: 'langosta-default-01',
+  title: 'El Gran Salto de la Langosta: Aventura Acuática',
+  description: 'Ayuda a la simpática langosta a saltar de piscina en piscina respondiendo correctamente cada pregunta sobre el fascinante ecosistema acuático y biología marina.',
   timePerQuestion: 20, // segundos (0 = sin límite)
   lives: 3,
   pointsPerCorrect: 100,
-  randomizeQuestions: false,
+  randomizeQuestions: true, // Por defecto activado para orden aleatorio
   randomizeAnswers: true,
   questions: [
     {
       id: 'q1',
-      question: '¿Qué tipo de animal es el camarón?',
+      question: '¿Qué tipo de extremidades principales caracterizan a las langostas y les permiten sujetar alimentos y defenderse?',
       options: [
-        'Un crustáceo decápodo',
-        'Un molusco gasterópodo',
-        'Un pez óseo',
-        'Un anfibio de agua dulce'
+        'Un par de grandes y poderosas pinzas o quelas',
+        'Tentáculos con ventosas adherentes',
+        'Aletas natatorias de cartílago',
+        'Espinas dorsales venenosas'
       ],
       correctAnswer: 0,
-      feedback: '¡Exacto! Los camarones son crustáceos decápodos porque poseen diez patas (cinco pares).'
+      feedback: '¡Exacto! Las langostas tienen grandes quelas o pinzas frontales muy fuertes que usan para alimentarse y protegerse.'
     },
     {
       id: 'q2',
-      question: '¿Por qué las piscinas de cultivo de camarón necesitan aireadores que baten el agua?',
+      question: '¿Por qué las piscinas y estanques de acuicultura necesitan sistemas de aireación continua?',
       options: [
-        'Para oxigenar el agua y mantener a los camarones saludables',
-        'Para enfriar el agua y hacerla potable',
-        'Para evitar que las algas crezcan rápidamente',
-        'Para empujar a los camarones hacia el borde'
+        'Para suministrar oxígeno disuelto vital y mantener el agua saludable',
+        'Para enfriar el agua hasta congelarla',
+        'Para evitar que las piedras del fondo floten',
+        'Para que los animales no puedan nadar hacia el centro'
       ],
       correctAnswer: 0,
-      feedback: '¡Muy bien! Los aireadores crean burbujas y corrientes que aportan el oxígeno disuelto vital para su crecimiento.'
+      feedback: '¡Muy bien! Los aireadores crean burbujas y corrientes que mantienen niveles óptimos de oxígeno en el agua.'
     },
     {
       id: 'q3',
-      question: '¿Dónde se encuentra el corazón de un camarón?',
+      question: '¿Cómo renuevan las langostas su duro caparazón exterior cuando crecen?',
       options: [
-        'En la cabeza (cefalotórax)',
-        'En la punta de la cola',
-        'En el abdomen medio',
-        'No tienen corazón'
+        'Mediante el proceso de muda o ecdisis de su exoesqueleto',
+        'Estirando el caparazón con agua caliente',
+        'Buscando y habitando la concha vacía de caracoles',
+        'Cambiando de color cada estación del año'
       ],
       correctAnswer: 0,
-      feedback: '¡Increíble pero cierto! La anatomía del camarón concentra sus órganos vitales, incluido el corazón, en la cabeza o cefalotórax.'
+      feedback: '¡Correcto! Al crecer, la langosta se desprende de su caparazón rígido y forma uno nuevo más grande.'
     },
     {
       id: 'q4',
-      question: '¿Qué le sucede al camarón cuando crece y su caparazón le queda pequeño?',
+      question: '¿Dónde se encuentran concentrados los órganos vitales más importantes de una langosta?',
       options: [
-        'Muda su exoesqueleto (proceso de ecdisis)',
-        'Su caparazón se estira como un globo',
-        'Busca la concha vacía de otro animal',
-        'Deja de alimentarse para no crecer más'
+        'En el cefalotórax (región de la cabeza y tórax)',
+        'En el extremo de su abanico caudal',
+        'En el interior de sus pinzas delanteras',
+        'Distribuido únicamente en sus patas traseras'
       ],
       correctAnswer: 0,
-      feedback: '¡Correcto! Los camarones mudan periódicamente su caparazón rígido para poder aumentar de tamaño.'
+      feedback: '¡Así es! La anatomía de los crustáceos concentra sus órganos vitales, como el corazón y estómago, en el cefalotórax protegido por el caparazón.'
     },
     {
       id: 'q5',
-      question: '¿Cuál es el color natural de la mayoría de camarones vivos en el agua?',
+      question: '¿Cómo utilizan las langostas su cola o abdomen para escapar rápidamente ante una amenaza?',
       options: [
-        'Translúcidos o grisáceos para camuflarse',
-        'Rojo brillante e intenso',
-        'Amarillo neón con rayas negras',
-        'Azul eléctrico en todas las especies'
+        'Flexionan con fuerza el abdomen hacia adelante dando un gran impulso hacia atrás',
+        'Expulsan una nube de tinta oscura',
+        'Se enrollan como una esfera y flotan',
+        'Aletean con sus largas antenas'
       ],
       correctAnswer: 0,
-      feedback: '¡Excelente! En su medio natural son casi transparentes para pasar desapercibidos ante los depredadores. Solo se vuelven anaranjados al cocinarse.'
+      feedback: '¡Gran salto! Con un potente golpe de cola hacia el vientre, las langostas se propulsan velozmente hacia atrás en el agua.'
     },
     {
       id: 'q6',
-      question: '¿Cómo se impulsan los camarones para dar un salto rápido hacia atrás?',
+      question: '¿Para qué le sirven a la langosta sus largas antenas y anténulas?',
       options: [
-        'Flexionando con fuerza su cola y abanico caudal',
-        'Soltando un chorro de tinta',
-        'Aleteando con sus largas antenas',
-        'Inflándose de burbujas de aire'
+        'Como órganos sensoriales para detectar corrientes, olores y peligros en el agua',
+        'Únicamente para mantener el equilibrio al caminar',
+        'Para atrapar presas grandes directamente',
+        'Para generar calor en aguas frías'
       ],
       correctAnswer: 0,
-      feedback: '¡Gran salto! Mediante una rápida contracción abdominal hacia abajo, el camarón puede impulsarse hacia atrás a gran velocidad.'
+      feedback: '¡Excelente! Las antenas tienen receptores químicos y táctiles fundamentales para orientarse en el medio acuático.'
     },
     {
       id: 'q7',
-      question: '¿Para qué utilizan los camarones sus largas antenas?',
+      question: '¿Qué pigmento natural le da a la langosta viva su color oscuro y cambia a rojo brillante al calentarse?',
       options: [
-        'Para orientarse, sentir corrientes y detectar comida o peligros',
-        'Exclusivamente para nadar en línea recta',
-        'Para comunicarse mediante ondas de radio',
-        'Para atrapar presas grandes'
+        'La astaxantina combinada con proteínas (crustacianina)',
+        'La clorofila absorbida de las algas',
+        'La melanina de la arena del fondo',
+        'El caroteno de las zanahorias'
       ],
       correctAnswer: 0,
-      feedback: '¡Así es! Las antenas y anténulas son órganos sensoriales fundamentales para explorar su entorno acuático.'
+      feedback: '¡Dato curioso! La astaxantina está unida a proteínas que la mantienen oscura. Al calentarse, la proteína se desnaturaliza y resalta el rojo brillante.'
     }
   ]
 };
 
-const STORAGE_KEY = 'juego_camaron_quiz_data';
-const PLAYER_KEY = 'juego_camaron_player_session';
-const RESULTS_KEY = 'juego_camaron_results_history';
-const ADMIN_PWD_KEY = 'juego_camaron_admin_pwd';
+const STORAGE_KEY = 'juego_langosta_quiz_data';
+const USERS_LIST_KEY = 'juego_langosta_registered_users';
+const ACTIVE_SESSION_KEY = 'juego_langosta_active_session';
+const RESULTS_KEY = 'juego_langosta_results_history';
+const ADMIN_PWD_KEY = 'juego_langosta_admin_pwd';
 
 export class QuizStorage {
   static loadQuiz() {
@@ -136,7 +137,7 @@ export class QuizStorage {
     }
   }
 
-  static exportToFile(quizData, filename = 'cuestionario_salto_camaron.json') {
+  static exportToFile(quizData, filename = 'cuestionario_salto_langosta.json') {
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(quizData, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
@@ -167,7 +168,7 @@ export class QuizStorage {
             timePerQuestion: typeof parsed.timePerQuestion === 'number' ? parsed.timePerQuestion : 20,
             lives: typeof parsed.lives === 'number' ? parsed.lives : 3,
             pointsPerCorrect: typeof parsed.pointsPerCorrect === 'number' ? parsed.pointsPerCorrect : 100,
-            randomizeQuestions: Boolean(parsed.randomizeQuestions),
+            randomizeQuestions: parsed.randomizeQuestions !== undefined ? Boolean(parsed.randomizeQuestions) : true,
             randomizeAnswers: parsed.randomizeAnswers !== undefined ? Boolean(parsed.randomizeAnswers) : true,
             questions: parsed.questions.map((q, idx) => ({
               id: q.id || `q-${idx}-${Date.now()}`,
@@ -188,30 +189,120 @@ export class QuizStorage {
   }
 }
 
-// Almacenamiento y Sesión del Jugador Registrado
-export class PlayerStorage {
-  static getPlayer() {
+// Almacenamiento y Gestión de Cuentas de Usuario (Registro e Inicio de Sesión)
+export class UserStorage {
+  static getUsers() {
     try {
-      const data = localStorage.getItem(PLAYER_KEY);
-      return data ? JSON.parse(data) : null;
+      const raw = localStorage.getItem(USERS_LIST_KEY);
+      return raw ? JSON.parse(raw) : [];
     } catch (e) {
-      return null;
+      return [];
     }
   }
 
-  static savePlayer(player) {
+  static saveUsers(usersList) {
     try {
-      localStorage.setItem(PLAYER_KEY, JSON.stringify(player));
+      localStorage.setItem(USERS_LIST_KEY, JSON.stringify(usersList));
       return true;
     } catch (e) {
       return false;
     }
   }
 
-  static clearPlayer() {
-    localStorage.removeItem(PLAYER_KEY);
+  static findUserByUsername(username) {
+    if (!username) return null;
+    const clean = username.trim().toLowerCase();
+    const users = this.getUsers();
+    return users.find(u => u.username.toLowerCase() === clean || u.email.toLowerCase() === clean || u.cedula === clean) || null;
+  }
+
+  static registerUser(userData) {
+    const { username, password, fullName, cedula, email, birthDate } = userData;
+    const users = this.getUsers();
+
+    const cleanUsername = username.trim().toLowerCase();
+    if (users.some(u => u.username.toLowerCase() === cleanUsername)) {
+      throw new Error(`El nombre de usuario "${username}" ya está registrado. Elige otro diferente.`);
+    }
+
+    const cleanCedula = cedula.trim();
+    if (users.some(u => u.cedula === cleanCedula)) {
+      throw new Error(`El número de cédula "${cedula}" ya tiene una cuenta registrada.`);
+    }
+
+    const newUser = {
+      id: 'usr-' + Date.now(),
+      username: username.trim(),
+      password: password.trim(),
+      fullName: fullName.trim(),
+      cedula: cleanCedula,
+      email: email.trim().toLowerCase(),
+      birthDate: birthDate,
+      registeredAt: Date.now()
+    };
+
+    users.push(newUser);
+    this.saveUsers(users);
+    this.setCurrentSession(newUser);
+    return newUser;
+  }
+
+  static loginUser(identifier, password) {
+    if (!identifier || !password) {
+      throw new Error('Por favor ingresa tu usuario y contraseña.');
+    }
+
+    const cleanIdentifier = identifier.trim().toLowerCase();
+    const users = this.getUsers();
+    const user = users.find(u =>
+      u.username.toLowerCase() === cleanIdentifier ||
+      u.email.toLowerCase() === cleanIdentifier ||
+      u.cedula === identifier.trim()
+    );
+
+    if (!user) {
+      throw new Error('No existe ninguna cuenta con ese usuario, correo o cédula.');
+    }
+
+    if (user.password !== password.trim()) {
+      throw new Error('Contraseña incorrecta. Por favor verifícala.');
+    }
+
+    this.setCurrentSession(user);
+    return user;
+  }
+
+  static getCurrentSession() {
+    try {
+      const raw = localStorage.getItem(ACTIVE_SESSION_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static setCurrentSession(user) {
+    try {
+      // Guardar sesión sin exponer directamente la contraseña en la sesión activa
+      const sessionData = { ...user };
+      delete sessionData.password;
+      localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(sessionData));
+    } catch (e) {
+      console.warn('Error guardando sesión:', e);
+    }
+  }
+
+  static clearSession() {
+    localStorage.removeItem(ACTIVE_SESSION_KEY);
   }
 }
+
+// Compatibilidad con PlayerStorage
+export const PlayerStorage = {
+  getPlayer: () => UserStorage.getCurrentSession(),
+  savePlayer: (player) => UserStorage.setCurrentSession(player),
+  clearPlayer: () => UserStorage.clearSession()
+};
 
 // Seguridad y Acceso del Administrador
 export class AdminStorage {
@@ -229,7 +320,7 @@ export class AdminStorage {
   }
 }
 
-// Historial de Calificaciones y Resultados de los Jugadores
+// Historial de Calificaciones y Reportes de los Jugadores
 export class ResultsStorage {
   static getResults() {
     try {
@@ -258,6 +349,42 @@ export class ResultsStorage {
     }
   }
 
+  static getUserResults(username) {
+    if (!username) return [];
+    const clean = username.trim().toLowerCase();
+    const all = this.getResults();
+    return all.filter(r => (r.username && r.username.toLowerCase() === clean) || (r.cedula && r.cedula === username));
+  }
+
+  static getUserStats(username) {
+    const attempts = this.getUserResults(username);
+    if (attempts.length === 0) {
+      return {
+        totalGames: 0,
+        bestScore: 0,
+        avgScore: 0,
+        victoriesCount: 0,
+        winRate: 0,
+        lastPlayed: 'Sin partidas aún'
+      };
+    }
+
+    const scores = attempts.map(a => a.score || 0);
+    const bestScore = Math.max(...scores);
+    const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / attempts.length);
+    const victoriesCount = attempts.filter(a => a.livesRemaining > 0 && a.questionsAnswered === a.totalQuestions).length;
+    const winRate = Math.round((victoriesCount / attempts.length) * 100);
+
+    return {
+      totalGames: attempts.length,
+      bestScore,
+      avgScore,
+      victoriesCount,
+      winRate,
+      lastPlayed: attempts[0].date
+    };
+  }
+
   static clearResults() {
     localStorage.removeItem(RESULTS_KEY);
   }
@@ -266,9 +393,10 @@ export class ResultsStorage {
     const results = this.getResults();
     if (results.length === 0) return false;
 
-    const headers = ['Fecha', 'Jugador', 'Cédula', 'Correo', 'Fecha Nacimiento', 'Puntaje', 'Vidas Restantes', 'Preguntas'];
+    const headers = ['Fecha', 'Usuario', 'Jugador', 'Cédula', 'Correo', 'Fecha Nacimiento', 'Puntaje', 'Vidas Restantes', 'Preguntas'];
     const rows = results.map(r => [
       `"${r.date || ''}"`,
+      `"${r.username || '-'}"`,
       `"${r.playerName || ''}"`,
       `"${r.cedula || ''}"`,
       `"${r.email || ''}"`,
@@ -282,7 +410,7 @@ export class ResultsStorage {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `reporte_jugadores_camaron_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.download = `reporte_jugadores_langosta_${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
     link.remove();
     return true;

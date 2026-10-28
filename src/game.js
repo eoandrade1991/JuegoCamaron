@@ -159,10 +159,20 @@ export class ShrimpJumpGame {
     );
   }
 
+  // Algoritmo de barajado Fisher-Yates estadísticamente insesgado
+  shuffleArray(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
   start(quiz) {
     this.quiz = JSON.parse(JSON.stringify(quiz));
-    if (this.quiz.randomizeQuestions) {
-      this.quiz.questions.sort(() => Math.random() - 0.5);
+    if (this.quiz.randomizeQuestions && Array.isArray(this.quiz.questions)) {
+      this.quiz.questions = this.shuffleArray(this.quiz.questions);
     }
 
     this.currentQuestionIndex = 0;
@@ -202,7 +212,7 @@ export class ShrimpJumpGame {
     const qData = this.quiz.questions[this.currentQuestionIndex];
     if (!qData) return;
 
-    // Mezclar opciones si está habilitado
+    // Preparar y mezclar opciones si está habilitado
     let optionsWithMeta = qData.options.map((optText, origIdx) => ({
       text: optText,
       originalIndex: origIdx,
@@ -210,7 +220,7 @@ export class ShrimpJumpGame {
     }));
 
     if (this.quiz.randomizeAnswers) {
-      optionsWithMeta.sort(() => Math.random() - 0.5);
+      optionsWithMeta = this.shuffleArray(optionsWithMeta);
     }
     this.currentOptions = optionsWithMeta;
 
@@ -793,7 +803,8 @@ export class ShrimpJumpGame {
 
     ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
     ctx.beginPath();
-    ctx.ellipse(this.shrimp.x, shadowY + 28, 30 * scale, 14 * scale, 0, 0, Math.PI * 2);
+    // Sombra más ancha para incluir las grandes pinzas de la langosta
+    ctx.ellipse(this.shrimp.x, shadowY + 28, 38 * scale, 16 * scale, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }
@@ -811,140 +822,291 @@ export class ShrimpJumpGame {
     ctx.translate(x, y);
     ctx.rotate(this.shrimp.rotation);
 
-    // Si falló y está en tierra seca, aplicar ligero tinte de barro y estrellas
+    // Si falló y está en tierra seca, aplicar ligero temblor
     if (this.shrimp.state === 'landed_fail') {
-      ctx.rotate(Math.sin(this.shrimp.bobTimer * 4) * 0.15); // temblorcito
+      ctx.rotate(Math.sin(this.shrimp.bobTimer * 4) * 0.15);
     }
 
-    // --- DIBUJADO VECTORIAL DEL CAMARÓN ---
-    // 1. Antenas largas y flexibles
+    // --- DIBUJADO VECTORIAL DE LA LANGOSTA (LOBSTER) ---
+    const clawPinch = Math.sin(this.shrimp.bobTimer * 3) * 0.15; // Suave movimiento de pinzas
+
+    // 1. Patitas caminadoras (4 pares a los lados)
+    ctx.strokeStyle = '#b91c1c';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    for (let leg = 0; leg < 4; leg++) {
+      const legY = 4 + leg * 6;
+      // Pata izquierda
+      ctx.beginPath();
+      ctx.moveTo(-14, legY);
+      ctx.quadraticCurveTo(-26, legY + 2, -32, legY + 12);
+      ctx.stroke();
+
+      // Pata derecha
+      ctx.beginPath();
+      ctx.moveTo(14, legY);
+      ctx.quadraticCurveTo(26, legY + 2, 32, legY + 12);
+      ctx.stroke();
+    }
+
+    // 2. Abanico Caudal / Cola (Telson central + Urópodos laterales con forma de abanico)
+    const tailColors = ['#991b1b', '#b91c1c', '#dc2626'];
+    ctx.fillStyle = tailColors[1];
+    ctx.beginPath();
+    // Telson central
+    ctx.moveTo(0, 26);
+    ctx.lineTo(-9, 44);
+    ctx.lineTo(0, 48);
+    ctx.lineTo(9, 44);
+    ctx.closePath();
+    ctx.fill();
+
+    // Urópodo izquierdo
+    ctx.fillStyle = tailColors[0];
+    ctx.beginPath();
+    ctx.moveTo(-6, 28);
+    ctx.quadraticCurveTo(-24, 38, -26, 48);
+    ctx.quadraticCurveTo(-14, 46, -4, 34);
+    ctx.closePath();
+    ctx.fill();
+
+    // Urópodo derecho
+    ctx.beginPath();
+    ctx.moveTo(6, 28);
+    ctx.quadraticCurveTo(24, 38, 26, 48);
+    ctx.quadraticCurveTo(14, 46, 4, 34);
+    ctx.closePath();
+    ctx.fill();
+
+    // 3. Segmentos del Abdomen (Placas de caparazón articuladas de la langosta)
+    const shellColors = ['#ef4444', '#dc2626', '#b91c1c', '#991b1b'];
+    for (let s = 4; s >= 0; s--) {
+      ctx.fillStyle = shellColors[s % shellColors.length];
+      ctx.beginPath();
+      const segY = 8 + s * 5;
+      ctx.ellipse(0, segY, 18 - s * 1.8, 6.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#7f1d1d';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // 4. Grandes Brazos y Pinzas Frontales Poderosas (Quelas de la Langosta)
+    // Brazo izquierdo articulado
+    ctx.fillStyle = '#b91c1c';
+    ctx.beginPath();
+    ctx.moveTo(-14, -4);
+    ctx.lineTo(-28, -12);
+    ctx.lineTo(-24, -18);
+    ctx.lineTo(-12, -8);
+    ctx.closePath();
+    ctx.fill();
+
+    // Brazo derecho articulado
+    ctx.beginPath();
+    ctx.moveTo(14, -4);
+    ctx.lineTo(28, -12);
+    ctx.lineTo(24, -18);
+    ctx.lineTo(12, -8);
+    ctx.closePath();
+    ctx.fill();
+
+    // Pinza Izquierda (Grande, con dedo fijo y dedo móvil)
+    ctx.save();
+    ctx.translate(-30, -22);
+    ctx.rotate(-0.25 + clawPinch);
+    // Palma principal
+    const clawGradL = ctx.createRadialGradient(-3, -3, 3, 0, 0, 16);
+    clawGradL.addColorStop(0, '#f87171');
+    clawGradL.addColorStop(0.6, '#dc2626');
+    clawGradL.addColorStop(1, '#991b1b');
+    ctx.fillStyle = clawGradL;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 14, 10, -0.2, 0, Math.PI * 2);
+    ctx.fill();
+    // Dedo fijo con dientes
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath();
+    ctx.moveTo(-6, -6);
+    ctx.quadraticCurveTo(-14, -18, -8, -22);
+    ctx.quadraticCurveTo(-4, -14, 0, -8);
+    ctx.closePath();
+    ctx.fill();
+    // Dedo móvil
+    ctx.beginPath();
+    ctx.moveTo(2, -6);
+    ctx.quadraticCurveTo(8, -18, 0, -23);
+    ctx.quadraticCurveTo(-1, -15, -2, -7);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // Pinza Derecha (Gran pinza trituradora)
+    ctx.save();
+    ctx.translate(30, -22);
+    ctx.rotate(0.25 - clawPinch);
+    // Palma principal
+    const clawGradR = ctx.createRadialGradient(3, -3, 3, 0, 0, 16);
+    clawGradR.addColorStop(0, '#f87171');
+    clawGradR.addColorStop(0.6, '#dc2626');
+    clawGradR.addColorStop(1, '#991b1b');
+    ctx.fillStyle = clawGradR;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 14, 10, 0.2, 0, Math.PI * 2);
+    ctx.fill();
+    // Dedo fijo
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath();
+    ctx.moveTo(6, -6);
+    ctx.quadraticCurveTo(14, -18, 8, -22);
+    ctx.quadraticCurveTo(4, -14, 0, -8);
+    ctx.closePath();
+    ctx.fill();
+    // Dedo móvil
+    ctx.beginPath();
+    ctx.moveTo(-2, -6);
+    ctx.quadraticCurveTo(-8, -18, 0, -23);
+    ctx.quadraticCurveTo(1, -15, 2, -7);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // 5. Cefalotórax (Cuerpo central y caparazón robusto)
+    const headGrad = ctx.createRadialGradient(-4, -8, 4, 0, -2, 28);
+    headGrad.addColorStop(0, '#f87171');
+    headGrad.addColorStop(0.5, '#ef4444');
+    headGrad.addColorStop(0.85, '#dc2626');
+    headGrad.addColorStop(1, '#991b1b');
+
+    ctx.fillStyle = headGrad;
+    ctx.beginPath();
+    ctx.ellipse(0, -6, 23, 21, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#7f1d1d';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Rostrum puntiagudo central con espinas laterales
+    ctx.fillStyle = '#dc2626';
+    ctx.beginPath();
+    ctx.moveTo(-5, -24);
+    ctx.lineTo(0, -38);
+    ctx.lineTo(5, -24);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#7f1d1d';
+    ctx.stroke();
+
+    // 6. Antenas sensoriales largas y vibrantes de la langosta
     ctx.strokeStyle = '#f97316';
     ctx.lineWidth = 3;
     ctx.lineCap = 'round';
 
     // Antena izquierda
     ctx.beginPath();
-    ctx.moveTo(-10, -18);
-    ctx.bezierCurveTo(-35, -45, -55, -20, -70, -45);
+    ctx.moveTo(-10, -20);
+    ctx.bezierCurveTo(-38, -50, -65, -30, -82, -55);
     ctx.stroke();
 
     // Antena derecha
     ctx.beginPath();
-    ctx.moveTo(10, -18);
-    ctx.bezierCurveTo(35, -45, 55, -20, 70, -45);
+    ctx.moveTo(10, -20);
+    ctx.bezierCurveTo(38, -50, 65, -30, 82, -55);
     ctx.stroke();
 
-    // 2. Abanico Caudal / Cola (Uropods)
-    ctx.fillStyle = '#ea580c';
+    // Anténulas interiores más cortas
+    ctx.strokeStyle = '#fb923c';
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(0, 22);
-    ctx.lineTo(-20, 42);
-    ctx.lineTo(0, 36);
-    ctx.lineTo(20, 42);
-    ctx.closePath();
+    ctx.moveTo(-4, -26);
+    ctx.quadraticCurveTo(-14, -42, -22, -45);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(4, -26);
+    ctx.quadraticCurveTo(14, -42, 22, -45);
+    ctx.stroke();
+
+    // 7. Pedúnculos Oculares y Ojos Caricatura Expresivos
+    // Pedúnculos (tallos)
+    ctx.fillStyle = '#b91c1c';
+    ctx.beginPath();
+    ctx.ellipse(-10, -14, 5, 4, -0.2, 0, Math.PI * 2);
+    ctx.ellipse(10, -14, 5, 4, 0.2, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3. Segmentos del Abdomen (Placas de caparazón)
-    const shellColors = ['#fb923c', '#f97316', '#ea580c', '#c2410c'];
-    for (let s = 3; s >= 0; s--) {
-      ctx.fillStyle = shellColors[s];
-      ctx.beginPath();
-      const segY = 8 + s * 6;
-      ctx.ellipse(0, segY, 18 - s * 2, 8, 0, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // 4. Cefalotórax y Cabeza grande y tierna
-    const headGrad = ctx.createRadialGradient(-4, -6, 4, 0, 0, 26);
-    headGrad.addColorStop(0, '#fdba74');
-    headGrad.addColorStop(0.7, '#fb923c');
-    headGrad.addColorStop(1, '#ea580c');
-
-    ctx.fillStyle = headGrad;
-    ctx.beginPath();
-    ctx.ellipse(0, -6, 24, 20, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Rostrum (espinita superior de la frente)
-    ctx.fillStyle = '#ea580c';
-    ctx.beginPath();
-    ctx.moveTo(-4, -22);
-    ctx.lineTo(0, -32);
-    ctx.lineTo(4, -22);
-    ctx.closePath();
-    ctx.fill();
-
-    // 5. Patitas delanteras / Quelípedos (Pinzas tiernas)
-    ctx.fillStyle = '#f97316';
-    // Pata izquierda
-    ctx.beginPath();
-    ctx.ellipse(-22, 2, 7, 5, -0.4, 0, Math.PI * 2);
-    ctx.fill();
-    // Pata derecha
-    ctx.beginPath();
-    ctx.ellipse(22, 2, 7, 5, 0.4, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 6. Ojos grandes estilo caricatura (Anime / Educaplay)
     // Ojo Izquierdo
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.ellipse(-10, -12, 8, 10, -0.1, 0, Math.PI * 2);
+    ctx.ellipse(-10, -16, 8, 10, -0.1, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#9a3412';
+    ctx.strokeStyle = '#7f1d1d';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
     // Pupila izquierda
-    ctx.fillStyle = '#1e1b4b';
+    ctx.fillStyle = '#0f172a';
     ctx.beginPath();
-    ctx.ellipse(-9, -12, 5, 6, 0, 0, Math.PI * 2);
+    ctx.ellipse(-9, -16, 5, 6, 0, 0, Math.PI * 2);
     ctx.fill();
-    // Brillo en el ojo
+    // Brillos especulares
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.arc(-11, -14, 2.5, 0, Math.PI * 2);
+    ctx.arc(-11, -18, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(-7, -13, 1.2, 0, Math.PI * 2);
     ctx.fill();
 
     // Ojo Derecho
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.ellipse(10, -12, 8, 10, 0.1, 0, Math.PI * 2);
+    ctx.ellipse(10, -16, 8, 10, 0.1, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#9a3412';
+    ctx.strokeStyle = '#7f1d1d';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
     // Pupila derecha
-    ctx.fillStyle = '#1e1b4b';
+    ctx.fillStyle = '#0f172a';
     ctx.beginPath();
-    ctx.ellipse(9, -12, 5, 6, 0, 0, Math.PI * 2);
+    ctx.ellipse(9, -16, 5, 6, 0, 0, Math.PI * 2);
     ctx.fill();
-    // Brillo en el ojo
+    // Brillos especulares
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    ctx.arc(7, -14, 2.5, 0, Math.PI * 2);
+    ctx.arc(7, -18, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(11, -13, 1.2, 0, Math.PI * 2);
     ctx.fill();
 
-    // 7. Boca sonriente tierna
-    ctx.strokeStyle = '#9a3412';
-    ctx.lineWidth = 2;
+    // 8. Sonrisa tierna y expresiva
+    ctx.strokeStyle = '#7f1d1d';
+    ctx.lineWidth = 2.2;
     ctx.beginPath();
     if (this.shrimp.state === 'landed_fail') {
-      // Boca mareada / triste
-      ctx.arc(0, 0, 6, Math.PI, 0, false);
+      // Boca mareada
+      ctx.arc(0, -3, 6, Math.PI, 0, false);
     } else {
-      // Sonrisa feliz
-      ctx.arc(0, -2, 6, 0, Math.PI, false);
+      // Sonrisa simpática
+      ctx.arc(0, -6, 7, 0.1 * Math.PI, 0.9 * Math.PI, false);
     }
     ctx.stroke();
 
-    // Si falló, mostrar estrellas o mareo sobre su cabeza
+    // Mejillas sonrosadas
+    ctx.fillStyle = 'rgba(254, 202, 202, 0.5)';
+    ctx.beginPath();
+    ctx.ellipse(-16, -6, 4, 3, 0, 0, Math.PI * 2);
+    ctx.ellipse(16, -6, 4, 3, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Efecto de mareo si cayó fuera del agua
     if (this.shrimp.state === 'landed_fail') {
       ctx.fillStyle = '#facc15';
       ctx.font = '16px sans-serif';
-      ctx.fillText('💫', -15, -34);
-      ctx.fillText('⭐', 10, -38);
+      ctx.fillText('💫', -16, -42);
+      ctx.fillText('⭐', 12, -45);
     }
 
     ctx.restore();

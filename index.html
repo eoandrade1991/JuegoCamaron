@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>Salto Camaronero | Juego Educativo Estilo Educaplay</title>
-    <meta name="description" content="Juego interactivo de preguntas y respuestas donde un camarón salta entre piscinas de acuicultura. Basado en la mecánica de Froggy Jumps de Educaplay con roles separados para Jugadores y Administradores." />
+    <title>El Salto de la Langosta | Juego Educativo Estilo Educaplay</title>
+    <meta name="description" content="Juego interactivo educativo donde una simpática langosta salta entre piscinas de acuicultura respondiendo preguntas. Incluye inicio de sesión, historial de puntajes y panel docente." />
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦐</text></svg>" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦞</text></svg>" />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
@@ -19,20 +19,24 @@
       <!-- Barra Superior de Navegación -->
       <header class="main-header">
         <div class="brand" id="brand-home" title="Ir al inicio">
-          <div class="brand-icon">🦐</div>
+          <div class="brand-icon">🦞</div>
           <div class="brand-text">
-            <h1>Salto Camaronero</h1>
+            <h1>El Salto de la Langosta</h1>
             <span class="tagline">Educaplay Edition</span>
           </div>
         </div>
 
         <!-- Pestañas de navegación según rol -->
         <nav class="nav-tabs" id="nav-tabs-container">
-          <button id="tab-play" class="nav-tab-btn active">
+          <button id="tab-play" class="nav-tab-btn active" title="Ir a la partida o lobby">
             <span class="tab-icon">🎮</span>
             <span class="tab-title">Jugar</span>
           </button>
-          <button id="tab-editor" class="nav-tab-btn view-hidden">
+          <button id="tab-profile" class="nav-tab-btn view-hidden" title="Ver mi historial de partidas, calificaciones e intentos">
+            <span class="tab-icon">📊</span>
+            <span class="tab-title">Mi Historial</span>
+          </button>
+          <button id="tab-editor" class="nav-tab-btn view-hidden" title="Panel exclusivo de administración">
             <span class="tab-icon">🛠️</span>
             <span class="tab-title">Panel Administrativo</span>
           </button>
@@ -44,7 +48,7 @@
           <div id="user-badge-container" class="user-badge-pill">
             <span id="user-badge-icon">👤</span>
             <span id="user-badge-text">No registrado</span>
-            <button id="btn-user-action" class="btn btn-sm btn-secondary" title="Cambiar jugador o registrarse">
+            <button id="btn-user-action" class="btn btn-sm btn-secondary" title="Iniciar sesión o registrarse">
               Identificarse
             </button>
           </div>
@@ -67,35 +71,41 @@
         <div class="lobby-container">
           <div class="lobby-card">
             <div class="lobby-hero-banner">
-              <img src="/assets/cover.jpg" alt="Camarón saltando entre piscinas de acuicultura" />
+              <img src="/assets/cover.jpg" alt="Langosta saltando entre piscinas de acuicultura" />
               <div class="lobby-hero-overlay"></div>
             </div>
 
             <div class="lobby-content">
               <h2 class="lobby-title" id="lobby-quiz-title">
-                El Gran Salto del <span>Camarón</span>
+                El Gran Salto de la <span>Langosta</span>
               </h2>
               <p class="lobby-desc" id="lobby-quiz-desc">
-                Ayuda al camarón a saltar de piscina en piscina respondiendo correctamente cada pregunta sobre el fascinante mundo acuático y su hábitat. ¡Cuidado con caer en la tierra seca!
+                Ayuda a la simpática langosta a saltar de piscina en piscina respondiendo correctamente cada pregunta sobre biología acuática y ecosistemas marinos. ¡Cuidado con caer en la tierra seca!
               </p>
 
               <!-- Tarjeta de bienvenida al jugador -->
               <div id="lobby-player-card" class="lobby-player-card">
-                <span class="player-icon">🦐</span>
+                <span class="player-icon">🦞</span>
                 <div class="player-details">
                   <div class="player-welcome-label">Jugador Activo:</div>
                   <div class="player-name-display" id="lobby-player-name">Sin registrar</div>
-                  <div class="player-sub-display" id="lobby-player-sub">Por favor regístrate para comenzar la partida</div>
+                  <div class="player-sub-display" id="lobby-player-sub">Por favor inicia sesión o regístrate para comenzar</div>
                 </div>
-                <button id="btn-lobby-change-player" class="btn btn-sm btn-secondary">
-                  Cambiar Datos
-                </button>
+                <div class="player-card-actions">
+                  <button id="btn-lobby-view-history" class="btn btn-sm btn-accent view-hidden">
+                    📊 Ver Historial
+                  </button>
+                  <button id="btn-lobby-change-player" class="btn btn-sm btn-secondary">
+                    Iniciar Sesión
+                  </button>
+                </div>
               </div>
 
               <div class="lobby-badges">
                 <span class="lobby-badge" id="lobby-badge-questions">📝 7 Preguntas</span>
                 <span class="lobby-badge" id="lobby-badge-lives">❤️ 3 Vidas</span>
                 <span class="lobby-badge" id="lobby-badge-time">⏱️ 20s por pregunta</span>
+                <span class="lobby-badge">🎲 Preguntas Aleatorias</span>
                 <span class="lobby-badge">🌊 Modo Acuicultura</span>
               </div>
 
@@ -171,18 +181,175 @@
         <div id="editor-container"></div>
       </section>
 
-      <!-- MODAL: REGISTRO OBLIGATORIO DE JUGADOR -->
-      <div id="modal-player-register" class="modal-overlay view-hidden">
-        <div class="modal-card modal-register-card">
-          <div class="modal-avatar">
-            <img src="/assets/mascot.jpg" alt="Mascota Camarón" />
-          </div>
-          <h2 class="modal-title">Registro del Jugador</h2>
-          <p class="modal-subtitle">
-            Ingresa tus datos personales para guardar tus puntuaciones y comenzar el juego.
-          </p>
+      <!-- VISTA 4: Perfil Personal, Reportes e Historial del Jugador -->
+      <section id="view-profile" class="view-section view-hidden">
+        <div class="profile-layout">
+          <!-- Cabecera de Identidad del Jugador -->
+          <div class="profile-header-card">
+            <div class="profile-avatar-wrapper">
+              <img src="/assets/mascot.jpg" alt="Avatar Langosta" class="profile-avatar-img" />
+              <span class="profile-badge-pill">🦞 Jugador Activo</span>
+            </div>
 
-          <form id="form-player-register" class="register-form">
+            <div class="profile-user-info">
+              <div class="profile-title-row">
+                <h2 id="profile-fullname" class="profile-fullname">Nombre del Jugador</h2>
+                <span id="profile-username" class="profile-username-tag">@usuario</span>
+              </div>
+              <p class="profile-subtitle">Panel personal de rendimiento y calificaciones académicas</p>
+
+              <div class="profile-meta-chips">
+                <div class="meta-chip">
+                  <span class="chip-label">🪪 Cédula:</span>
+                  <strong id="profile-cedula" class="chip-val">-</strong>
+                </div>
+                <div class="meta-chip">
+                  <span class="chip-label">✉️ Correo:</span>
+                  <strong id="profile-email" class="chip-val">-</strong>
+                </div>
+                <div class="meta-chip">
+                  <span class="chip-label">🎂 Nacimiento:</span>
+                  <strong id="profile-birthdate" class="chip-val">-</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-actions-bar">
+              <button id="btn-profile-play" class="btn btn-primary" title="Iniciar una nueva partida">
+                🎮 Jugar Partida
+              </button>
+              <button id="btn-profile-logout" class="btn btn-danger-outline" title="Cerrar la sesión actual">
+                🚪 Cerrar Sesión
+              </button>
+            </div>
+          </div>
+
+          <!-- Métricas y Tarjetas de Rendimiento (KPIs) -->
+          <div class="profile-kpis-grid">
+            <div class="kpi-card kpi-best">
+              <div class="kpi-icon">🏆</div>
+              <div class="kpi-body">
+                <span class="kpi-label">Mejor Puntaje</span>
+                <span class="kpi-value" id="profile-kpi-best">0</span>
+                <span class="kpi-desc">Récord personal alcanzado</span>
+              </div>
+            </div>
+
+            <div class="kpi-card kpi-games">
+              <div class="kpi-icon">🎯</div>
+              <div class="kpi-body">
+                <span class="kpi-label">Intentos Jugados</span>
+                <span class="kpi-value" id="profile-kpi-games">0</span>
+                <span class="kpi-desc">Partidas completadas</span>
+              </div>
+            </div>
+
+            <div class="kpi-card kpi-avg">
+              <div class="kpi-icon">📈</div>
+              <div class="kpi-body">
+                <span class="kpi-label">Puntaje Promedio</span>
+                <span class="kpi-value" id="profile-kpi-avg">0</span>
+                <span class="kpi-desc">Efectividad general</span>
+              </div>
+            </div>
+
+            <div class="kpi-card kpi-winrate">
+              <div class="kpi-icon">🏅</div>
+              <div class="kpi-body">
+                <span class="kpi-label">Tasa de Victorias</span>
+                <span class="kpi-value" id="profile-kpi-winrate">0%</span>
+                <span class="kpi-desc" id="profile-kpi-victories">0 victorias</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Historial de Partidas Detallado -->
+          <div class="profile-history-card">
+            <div class="history-card-header">
+              <div class="history-header-left">
+                <h3>📋 Historial de Intentos y Calificaciones</h3>
+                <p>Detalle cronológico de cada partida jugada por este usuario</p>
+              </div>
+              <button id="btn-profile-export-csv" class="btn btn-sm btn-secondary" title="Descargar mis intentos en Excel / CSV">
+                📥 Descargar Mis Reportes (.csv)
+              </button>
+            </div>
+
+            <div id="profile-history-container" class="history-table-container">
+              <!-- Renderizado dinámicamente con las filas de intentos -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODAL: AUTENTICACIÓN (INICIO DE SESIÓN Y REGISTRO CON PESTAÑAS) -->
+      <div id="modal-player-register" class="modal-overlay view-hidden">
+        <div class="modal-card modal-auth-card">
+          <div class="modal-avatar">
+            <img src="/assets/mascot.jpg" alt="Mascota Langosta" />
+          </div>
+
+          <!-- Pestañas del Modal -->
+          <div class="auth-tabs-nav">
+            <button type="button" class="auth-tab-btn active" id="auth-tab-btn-login">
+              🔓 Iniciar Sesión
+            </button>
+            <button type="button" class="auth-tab-btn" id="auth-tab-btn-register">
+              📝 Crear Cuenta
+            </button>
+          </div>
+
+          <!-- Panel 1: Iniciar Sesión (Usuario y Contraseña) -->
+          <form id="form-user-login" class="auth-form-panel">
+            <h3 class="modal-title" style="margin-top: 6px;">Iniciar Sesión</h3>
+            <p class="modal-subtitle">
+              Ingresa tus credenciales para ver tu historial de puntajes, número de intentos y estadísticas del juego.
+            </p>
+
+            <div class="form-group">
+              <label for="login-identifier"><strong>Usuario, Cédula o Correo *</strong></label>
+              <input type="text" id="login-identifier" class="form-control" placeholder="Ej: edgar99 o 0912345678" required autocomplete="username" />
+            </div>
+
+            <div class="form-group">
+              <label for="login-password"><strong>Contraseña *</strong></label>
+              <input type="password" id="login-password" class="form-control" placeholder="Escribe tu contraseña..." required autocomplete="current-password" />
+            </div>
+
+            <div id="login-error-msg" class="form-error-msg view-hidden"></div>
+
+            <div class="modal-actions" style="margin-top: 18px;">
+              <button type="submit" class="btn btn-primary" style="flex: 2;">
+                🚀 Ingresar y Ver Mi Perfil
+              </button>
+              <button type="button" id="btn-cancel-login" class="btn btn-secondary" style="flex: 1;">
+                Cancelar
+              </button>
+            </div>
+
+            <div class="auth-switch-prompt">
+              ¿Aún no tienes cuenta? <button type="button" id="btn-switch-to-reg-link" class="btn-link">Regístrate gratis aquí</button>
+            </div>
+          </form>
+
+          <!-- Panel 2: Registro de Nuevo Usuario -->
+          <form id="form-player-register" class="auth-form-panel view-hidden">
+            <h3 class="modal-title" style="margin-top: 6px;">Crear Cuenta de Jugador</h3>
+            <p class="modal-subtitle">
+              Regístrate con tus datos completos. Tu usuario y contraseña te permitirán consultar tus calificaciones en cualquier momento.
+            </p>
+
+            <div class="form-row">
+              <div class="form-group col">
+                <label for="reg-username"><strong>Nombre de Usuario *</strong></label>
+                <input type="text" id="reg-username" class="form-control" placeholder="Ej: juanito99" required autocomplete="username" />
+              </div>
+              <div class="form-group col">
+                <label for="reg-password"><strong>Contraseña *</strong></label>
+                <input type="password" id="reg-password" class="form-control" placeholder="Mínimo 4 caracteres" required autocomplete="new-password" />
+              </div>
+            </div>
+
             <div class="form-group">
               <label for="reg-fullname"><strong>Nombres y Apellidos Completos *</strong></label>
               <input type="text" id="reg-fullname" class="form-control" placeholder="Ej: Juan Carlos Pérez Gómez" required />
@@ -202,18 +369,22 @@
 
             <div class="form-group">
               <label for="reg-email"><strong>Correo Electrónico *</strong></label>
-              <input type="email" id="reg-email" class="form-control" placeholder="Ej: juan.perez@ejemplo.com" required />
+              <input type="email" id="reg-email" class="form-control" placeholder="Ej: juan.perez@ejemplo.com" required autocomplete="email" />
             </div>
 
             <div id="register-error-msg" class="form-error-msg view-hidden"></div>
 
             <div class="modal-actions" style="margin-top: 14px;">
               <button type="submit" class="btn btn-primary" style="flex: 2;">
-                🎮 ¡Guardar y Comenzar a Jugar!
+                🎉 Crear Cuenta y Comenzar
               </button>
               <button type="button" id="btn-cancel-register" class="btn btn-secondary" style="flex: 1;">
                 Cancelar
               </button>
+            </div>
+
+            <div class="auth-switch-prompt">
+              ¿Ya tienes cuenta? <button type="button" id="btn-switch-to-login-link" class="btn-link">Inicia sesión aquí</button>
             </div>
           </form>
         </div>
@@ -225,7 +396,7 @@
           <div class="admin-lock-icon">🔒</div>
           <h2 class="modal-title">Acceso Administrativo</h2>
           <p class="modal-subtitle">
-            Ingresa la contraseña para editar preguntas, cambiar configuraciones y ver las calificaciones de los jugadores.
+            Ingresa la contraseña para editar preguntas, configurar el orden aleatorio y ver los reportes completos de los estudiantes.
           </p>
 
           <form id="form-admin-login" class="admin-login-form">
@@ -372,12 +543,12 @@
       <div id="modal-victory" class="modal-overlay view-hidden">
         <div class="modal-card">
           <div class="modal-avatar">
-            <img src="/assets/mascot.jpg" alt="Camarón Feliz" />
+            <img src="/assets/mascot.jpg" alt="Langosta Feliz" />
           </div>
           <div class="stars-rating" id="victory-stars">⭐⭐⭐</div>
           <h2 class="modal-title">¡Misión Cumplida!</h2>
           <p class="modal-subtitle">
-            ¡Felicidades <strong id="victory-player-name">Jugador</strong>! El camarón cruzó exitosamente todos los estanques.
+            ¡Felicidades <strong id="victory-player-name">Jugador</strong>! La simpática langosta cruzó exitosamente todos los estanques acuáticos.
           </p>
           <div class="score-highlight">
             <div class="label">Puntuación Final</div>
@@ -386,6 +557,9 @@
           <div class="modal-actions">
             <button id="btn-victory-replay" class="btn btn-primary">
               🔄 Jugar de Nuevo
+            </button>
+            <button id="btn-victory-profile" class="btn btn-accent">
+              📊 Ver Mi Historial
             </button>
             <button id="btn-victory-exit" class="btn btn-secondary">
               🏠 Menú Principal
@@ -398,11 +572,11 @@
       <div id="modal-gameover" class="modal-overlay view-hidden">
         <div class="modal-card">
           <div class="modal-avatar" style="border-color: #ef4444;">
-            <img src="/assets/mascot.jpg" alt="Camarón en apuros" />
+            <img src="/assets/mascot.jpg" alt="Langosta en apuros" />
           </div>
-          <h2 class="modal-title" style="color: #f87171;">¡El Camarón cayó en tierra seca!</h2>
+          <h2 class="modal-title" style="color: #f87171;">¡La Langosta cayó en tierra seca!</h2>
           <p class="modal-subtitle">
-            ¡Buen intento, <strong id="gameover-player-name">Jugador</strong>! Se agotaron las vidas en tierra.
+            ¡Buen intento, <strong id="gameover-player-name">Jugador</strong>! Se agotaron las vidas fuera del agua.
           </p>
           <div class="score-highlight">
             <div class="label">Puntos Obtenidos</div>
@@ -411,6 +585,9 @@
           <div class="modal-actions">
             <button id="btn-gameover-retry" class="btn btn-primary">
               🔁 Reintentar
+            </button>
+            <button id="btn-gameover-profile" class="btn btn-accent">
+              📊 Ver Mi Historial
             </button>
             <button id="btn-gameover-exit" class="btn btn-secondary">
               🏠 Menú Principal

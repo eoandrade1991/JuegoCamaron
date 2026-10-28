@@ -1,4 +1,4 @@
-import { PlayerStorage, AdminStorage } from './storage.js';
+import { UserStorage, AdminStorage } from './storage.js';
 
 export class AuthManager {
   constructor(onAuthChange) {
@@ -10,10 +10,10 @@ export class AuthManager {
   }
 
   checkInitialSession() {
-    const savedPlayer = PlayerStorage.getPlayer();
-    if (savedPlayer) {
+    const session = UserStorage.getCurrentSession();
+    if (session) {
       this.currentRole = 'player';
-      this.playerData = savedPlayer;
+      this.playerData = session;
     } else {
       this.currentRole = 'guest';
       this.playerData = null;
@@ -28,9 +28,30 @@ export class AuthManager {
     return this.playerData;
   }
 
-  registerPlayer(formData) {
-    const { fullName, cedula, email, birthDate } = formData;
+  loginUser(identifier, password) {
+    if (!identifier || !identifier.trim()) {
+      throw new Error('Ingresa tu usuario, correo electrónico o cédula.');
+    }
+    if (!password || !password.trim()) {
+      throw new Error('Ingresa tu contraseña.');
+    }
 
+    const user = UserStorage.loginUser(identifier, password);
+    this.playerData = user;
+    this.currentRole = 'player';
+    this.onAuthChange(this.currentRole, this.playerData);
+    return user;
+  }
+
+  registerUser(formData) {
+    const { username, password, fullName, cedula, email, birthDate } = formData;
+
+    if (!username || username.trim().length < 3) {
+      throw new Error('El nombre de usuario debe tener al menos 3 caracteres.');
+    }
+    if (!password || password.trim().length < 4) {
+      throw new Error('La contraseña debe tener al menos 4 caracteres.');
+    }
     if (!fullName || fullName.trim().length < 3) {
       throw new Error('Por favor, ingresa tus nombres y apellidos completos.');
     }
@@ -44,19 +65,24 @@ export class AuthManager {
       throw new Error('Por favor, selecciona tu fecha de nacimiento.');
     }
 
-    const player = {
+    const user = UserStorage.registerUser({
+      username: username.trim(),
+      password: password.trim(),
       fullName: fullName.trim(),
       cedula: cedula.trim(),
       email: email.trim().toLowerCase(),
-      birthDate: birthDate,
-      registeredAt: Date.now()
-    };
+      birthDate: birthDate
+    });
 
-    PlayerStorage.savePlayer(player);
-    this.playerData = player;
+    this.playerData = user;
     this.currentRole = 'player';
     this.onAuthChange(this.currentRole, this.playerData);
-    return player;
+    return user;
+  }
+
+  // Alias retrocompatible
+  registerPlayer(formData) {
+    return this.registerUser(formData);
   }
 
   loginAdmin(password) {
@@ -73,17 +99,17 @@ export class AuthManager {
   }
 
   logout() {
-    PlayerStorage.clearPlayer();
+    UserStorage.clearSession();
     this.playerData = null;
     this.currentRole = 'guest';
     this.onAuthChange(this.currentRole, null);
   }
 
   exitAdminMode() {
-    const savedPlayer = PlayerStorage.getPlayer();
-    if (savedPlayer) {
+    const session = UserStorage.getCurrentSession();
+    if (session) {
       this.currentRole = 'player';
-      this.playerData = savedPlayer;
+      this.playerData = session;
     } else {
       this.currentRole = 'guest';
       this.playerData = null;
@@ -91,3 +117,4 @@ export class AuthManager {
     this.onAuthChange(this.currentRole, this.playerData);
   }
 }
+
